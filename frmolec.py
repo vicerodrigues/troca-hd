@@ -12,7 +12,7 @@ class FrameIniciaMolecula(ttk.Frame):
         de massas consideradas.
     """
 
-    def __init__(self, parent, controller, frame1, frame2, check):
+    def __init__(self, parent, controller, frame1, frame2):
         ttk.Frame.__init__(self, parent)
 
         # Esta variável passada pela classe principal é a instância do logframe e permite
@@ -23,9 +23,6 @@ class FrameIniciaMolecula(ttk.Frame):
         # Esta variável passada pela classe principal é a instância de frame de abrir arquivos e permite
         # que frmolec interaja com os botões habilitando-os
         self.frame2 = frame2
-
-        # Boolean contendo o uso do espectro perdeuterado:
-        self.check = check
 
         # Inicia o frame da classe
         self.iniciaMolec = ttk.Frame(self, padding=(5, 5, 5, 5), relief=RIDGE, borderwidth=2)
@@ -196,9 +193,7 @@ myCarbonNumber.get(), self.myHydNumber.get(), self.mySpecMin.get(), self.mySpecM
 
             # colocar aqui um if para somente liberar este botão caso esteja marcada a opção de utilizar o espectro
             # perdeuterado.
-
-            if self.check:
-                self.frame2.btnAbrePerdeuterado.configure(state='enabled')
+            self.frame2.btnAbrePerdeuterado.configure(state='enabled')
 
             self.frame2.btnAbrePeridrogenado.focus_force()
 
