@@ -32,14 +32,15 @@ class TrocaMain(Tk):
         self.frames[frlog.FrameLog] = frame1
         frame1.grid(row=0, column=1, sticky=(N, S, E, W))
 
-        # Frame Inicia Molecula
-        frame2 = frmolec.FrameIniciaMolecula(self.mainFrame, self, frame1)
-        self.frames[frmolec.FrameIniciaMolecula] = frame2
-        frame2.grid(row=0, column=0, sticky=(N, S, E, W))
+        # Frame Abre Arquivos
+        frame2 = frfiles.FrameAbreArquivos(self.mainFrame, self, frame1)
+        self.frames[frfiles.FrameAbreArquivos] = frame2
+        frame2.grid(row=1, column=0, sticky=(N, S, E, W), columnspan=2)
 
-        frame3 = frfiles.FrameAbreArquivos(self.mainFrame, self, frame1)
-        self.frames[frfiles.FrameAbreArquivos] = frame3
-        frame3.grid(row=1, column=0, sticky=(N, S, E, W), columnspan=2)
+        # Frame Inicia Molecula
+        frame3 = frmolec.FrameIniciaMolecula(self.mainFrame, self, frame1, frame2)
+        self.frames[frmolec.FrameIniciaMolecula] = frame3
+        frame3.grid(row=0, column=0, sticky=(N, S, E, W))
 
         # def on_closing():
         # Criar aqui o docstring

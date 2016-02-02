@@ -11,13 +11,19 @@ class FrameIniciaMolecula(ttk.Frame):
         de massas consideradas.
     """
 
-    def __init__(self, parent, controller, frame1):
+    def __init__(self, parent, controller, frame1, frame2):
         ttk.Frame.__init__(self, parent)
 
         # Esta variável passada pela classe principal é a instância do logframe e permite
         # escrever no log.
         self.frame1 = frame1
         self.frame1.WriteLog('info', 'Iniciando Frames de descrição da molécula e espectro.')
+
+        # Esta variável passada pela classe principal é a instância de frame de abrir arquivos e permite
+        # que frmolec interaja com os botões habilitando-os
+        self.frame2 = frame2
+        # Somente um teste!!!!!!!
+        #self.frame2.btnAbrePeridrogenado.configure(state='enabled')
 
         # Inicia o frame da classe
         self.iniciaMolec = ttk.Frame(self, padding=(5, 5, 5, 5), relief=RIDGE, borderwidth=2)
@@ -177,5 +183,19 @@ myCarbonNumber.get(), self.myHydNumber.get(), self.mySpecMin.get(), self.mySpecM
 
             for i in range(self.myCarbonNumber.get()+1):
                 self.frame1.WriteLog('info', ' '*7 + '13C [%i]:' %i + '%.10f' %self.myC13Matrix[i] + '\n')
+            self.frame1.WriteLog('info', '\n')
             self.frame1.text_handler.setFormatter(logging.Formatter(self.frame1.format_))
+
+            self.frame1.WriteLog('info', 'Habilitando os botões para abrir os arquivos de espectros de massas')
+
+            # habilitando os botões
+            self.frame2.btnAbrePeridrogenado.configure(state='enabled')
+            self.frame2.btnAbreMistura.configure(state='enabled')
+
+            # colocar aqui um if para somente liberar este botão caso esteja marcada a opção de utilizar o espectro
+            # perdeuterado.
+            self.frame2.btnAbrePerdeuterado.configure(state='enabled')
+
+            self.frame2.btnAbrePeridrogenado.focus_force()
+
             break

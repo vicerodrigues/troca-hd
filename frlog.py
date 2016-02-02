@@ -18,7 +18,7 @@ class FrameLog(ttk.Frame, logging.Handler):
 
         # Cria a label e o tkinter.Text
         self.lbl = ttk.Label(self.iniciaLog, text='LOG:', font='TkCaptionFont')
-        self.lbl.grid(row=0, column=0, sticky=(W), pady=(5, 2))
+        self.lbl.grid(row=0, column=0, sticky=W, pady=(5, 2))
         self.logText = Text(self.iniciaLog, width=45, height=15, wrap='word')
         self.logText.grid(row=1, column=0)
         self.logText.configure(state='disabled')

@@ -38,22 +38,40 @@ class FrameAbreArquivos(ttk.Frame):
 
         # Popula os frames de abertura de arquivos
         self.btnAbrePeridrogenado = ttk.Button(self.abrePeridrogenado, text='Abrir')
-        self.btnAbrePeridrogenado.grid(row=0, column=0)
+        self.btnAbrePeridrogenado.grid(row=0, column=0, columnspan=2, pady=(0, 5))
         self.btnAbrePeridrogenado.configure(state='disabled')
         self.espectroPeridrogenado = Text(self.abrePeridrogenado, width=15, height=10, wrap='none')
         self.espectroPeridrogenado.grid(row=1, column=0)
         self.espectroPeridrogenado.configure(state='disabled')
 
+        # Criando a ScrollBar e associando a TextBox
+        self.espectroPeridrogenadoScroll = ttk.Scrollbar(self.abrePeridrogenado, orient=VERTICAL,
+                                                         command=self.espectroPeridrogenado.yview)
+        self.espectroPeridrogenadoScroll.grid(row=1, column=1, sticky=(N, S))
+        self.espectroPeridrogenado['yscrollcommand'] = self.espectroPeridrogenadoScroll.set
+
         self.btnAbrePerdeuterado = ttk.Button(self.abrePerdeuterado, text='Abrir')
-        self.btnAbrePerdeuterado.grid(row=0, column=0)
+        self.btnAbrePerdeuterado.grid(row=0, column=0, columnspan=2, pady=(0, 5))
         self.btnAbrePerdeuterado.configure(state='disabled')
         self.espectroPerdeuterado = Text(self.abrePerdeuterado, width=15, height=10, wrap='none')
         self.espectroPerdeuterado.grid(row=1, column=0)
         self.espectroPerdeuterado.configure(state='disabled')
 
+        # Criando a ScrollBar e associando a TextBox
+        self.espectroPerdeuteradoScroll = ttk.Scrollbar(self.abrePerdeuterado, orient=VERTICAL,
+                                                         command=self.espectroPerdeuterado.yview)
+        self.espectroPerdeuteradoScroll.grid(row=1, column=1, sticky=(N, S))
+        self.espectroPerdeuterado['yscrollcommand'] = self.espectroPerdeuteradoScroll.set
+
         self.btnAbreMistura = ttk.Button(self.abreMistura, text='Abrir')
-        self.btnAbreMistura.grid(row=0, column=0)
+        self.btnAbreMistura.grid(row=0, column=0, columnspan=2, pady=(0, 5))
         self.btnAbreMistura.configure(state='disabled')
         self.espectroMistura = Text(self.abreMistura, width=15, height=10, wrap='none')
         self.espectroMistura.grid(row=1, column=0)
         self.espectroMistura.configure(state='disabled')
+
+        # Criando a ScrollBar e associando a TextBox
+        self.espectroMisturaScroll = ttk.Scrollbar(self.abreMistura, orient=VERTICAL,
+                                                         command=self.espectroMistura.yview)
+        self.espectroMisturaScroll.grid(row=1, column=1, sticky=(N, S))
+        self.espectroMistura['yscrollcommand'] = self.espectroMisturaScroll.set
