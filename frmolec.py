@@ -1,7 +1,8 @@
 from tkinter import *
 from tkinter import ttk
 import tkinter.messagebox as messagebox
-import molec, c13matrix
+import molec
+import c13matrix
 import logging
 
 
@@ -11,7 +12,7 @@ class FrameIniciaMolecula(ttk.Frame):
         de massas consideradas.
     """
 
-    def __init__(self, parent, controller, frame1, frame2):
+    def __init__(self, parent, controller, frame1, frame2, check):
         ttk.Frame.__init__(self, parent)
 
         # Esta variável passada pela classe principal é a instância do logframe e permite
@@ -22,8 +23,9 @@ class FrameIniciaMolecula(ttk.Frame):
         # Esta variável passada pela classe principal é a instância de frame de abrir arquivos e permite
         # que frmolec interaja com os botões habilitando-os
         self.frame2 = frame2
-        # Somente um teste!!!!!!!
-        #self.frame2.btnAbrePeridrogenado.configure(state='enabled')
+
+        # Boolean contendo o uso do espectro perdeuterado:
+        self.check = check
 
         # Inicia o frame da classe
         self.iniciaMolec = ttk.Frame(self, padding=(5, 5, 5, 5), relief=RIDGE, borderwidth=2)
@@ -44,7 +46,7 @@ class FrameIniciaMolecula(ttk.Frame):
         self.myHydNumber.set(6)
 
         # Popula o primeiro frame com os dados da molécula
-        self.lbl1 = ttk.Label(self.molecFrame, text='Molécula: C', padding=(0, 0, 0, 15), font=('TkCaptionFont'))
+        self.lbl1 = ttk.Label(self.molecFrame, text='Molécula: C', padding=(0, 0, 0, 15), font='TkCaptionFont')
         self.lbl1.grid(row=0, column=0, pady=5)
         self.carbonNumber = Spinbox(self.molecFrame, from_=1, to=9, textvariable=self.myCarbonNumber, increment=1,
                                     width=1)
@@ -80,7 +82,7 @@ class FrameIniciaMolecula(ttk.Frame):
         self.myMMD = IntVar()
         self.nPoints = IntVar()
 
-        #Variáveis booleanas para lançamentos de erros repetitivos
+        # Variáveis booleanas para lançamentos de erros repetitivos
         self.mySpecWarn = False
         self.mySupraWarn = False
         self.myMetilaWarn = False
@@ -194,7 +196,9 @@ myCarbonNumber.get(), self.myHydNumber.get(), self.mySpecMin.get(), self.mySpecM
 
             # colocar aqui um if para somente liberar este botão caso esteja marcada a opção de utilizar o espectro
             # perdeuterado.
-            self.frame2.btnAbrePerdeuterado.configure(state='enabled')
+
+            if self.check:
+                self.frame2.btnAbrePerdeuterado.configure(state='enabled')
 
             self.frame2.btnAbrePeridrogenado.focus_force()
 
