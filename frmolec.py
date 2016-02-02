@@ -20,7 +20,7 @@ class FrameIniciaMolecula(ttk.Frame):
         self.frame1.WriteLog('info', 'Iniciando Frames de descrição da molécula e espectro.')
 
         # Inicia o frame da classe
-        self.iniciaMolec = ttk.Frame(self, padding=(5, 5, 12, 12), relief=RIDGE, borderwidth=2)
+        self.iniciaMolec = ttk.Frame(self, padding=(5, 5, 5, 5), relief=RIDGE, borderwidth=2)
         self.iniciaMolec.grid(row=0, column=0, sticky=(N, S, E, W), padx=2, pady=2)
 
         # Três frames internos para ajudar no alinhamento independente

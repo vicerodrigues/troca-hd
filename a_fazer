@@ -10,5 +10,6 @@
 
 
 Na fila imediata:
-    -Calcula a matriz de contribuições de 13C
-    -Criar o frame para abrir os arquivos dos espectros
+    -Criar o frame para abrir os arquivos dos espectros frfiles
+    -Criar leitor de planilha excel e texto dos arquivos
+    -Criar rotina para habilitar os botões que abrirão os arquivos em frmolec

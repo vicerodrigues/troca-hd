@@ -4,6 +4,7 @@ from tkinter import *
 from tkinter import ttk
 import frmolec
 import frlog
+import frfiles
 
 
 # import tkinter.messagebox as messagebox
@@ -35,6 +36,10 @@ class TrocaMain(Tk):
         frame2 = frmolec.FrameIniciaMolecula(self.mainFrame, self, frame1)
         self.frames[frmolec.FrameIniciaMolecula] = frame2
         frame2.grid(row=0, column=0, sticky=(N, S, E, W))
+
+        frame3 = frfiles.FrameAbreArquivos(self.mainFrame, self, frame1)
+        self.frames[frfiles.FrameAbreArquivos] = frame3
+        frame3.grid(row=1, column=0, sticky=(N, S, E, W), columnspan=2)
 
         # def on_closing():
         # Criar aqui o docstring
