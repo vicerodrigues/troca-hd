@@ -1,0 +1,14 @@
+- Implementar reset de todas as mensagens de log
+
+-IMPLEMENTAR UM CAIXA DE TEXTO COM SCROLL PARA MOSTRAR LOG DO PROGRAMA: o mesmo deve poder ser salvo em um arquivo
+ log
+
+-Uma idéia interessante é permitir, através de um menu, modificar o nível de LOG do sistema
+
+-Incluir no menu uma checkbox para utilização do espectro perdeuterado
+
+
+
+Na fila imediata:
+    -Calcula a matriz de contribuições de 13C
+    -Criar o frame para abrir os arquivos dos espectros
