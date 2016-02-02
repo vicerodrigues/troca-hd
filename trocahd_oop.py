@@ -5,7 +5,6 @@ from tkinter import ttk
 import frmolec
 import frlog
 import frfiles
-import troca_menubar
 
 
 # import tkinter.messagebox as messagebox
