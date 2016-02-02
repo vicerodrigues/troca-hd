@@ -2,6 +2,8 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="6a9df99e-f9e6-4fd7-a3ec-aee6431aada6" name="Default" comment="">
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/frfiles.py" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/a_fazer" afterPath="$PROJECT_DIR$/a_fazer" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/frmolec.py" afterPath="$PROJECT_DIR$/frmolec.py" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/trocahd_oop.py" afterPath="$PROJECT_DIR$/trocahd_oop.py" />
