@@ -11,6 +11,7 @@
 
 Na fila imediata:
     -Criar o frame para abrir os arquivos dos espectros frfiles
-    -Criar leitor de planilha excel e texto dos arquivos
-    -Criar os menus da janela principal
-    -Criar os scrolls das caixas de texto em frfiles
+    -Criar leitor de planilha excel e texto (future) dos arquivos
+    -Criar as funções e interações dos menus da janela principal com os frames
+    -Criar os scrolls horizontais das caixas de texto em frfiles
+    -Desabilitar o acesso a frmolec depois de clicar em Aceitar, a não ser que o usuário faça um reset :)

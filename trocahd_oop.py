@@ -4,7 +4,7 @@ from tkinter import *
 from tkinter import ttk
 import frmolec
 import frlog
-import frfiles
+import frfiles, frmenu
 
 
 # import tkinter.messagebox as messagebox
@@ -15,10 +15,10 @@ class TrocaMain(Tk):
         Nesta classe é criado o frame principal e são chamadas as classes que criam
         os frames secundários que criam as demais partes do programa.
     """
-
+        
     def __init__(self, *args, **kwargs):
         Tk.__init__(self, *args, **kwargs)
-
+        
         # Inicia frame mestre em self
         self.mainFrame = ttk.Frame(self, relief=RAISED, borderwidth=2)
         self.mainFrame.grid(row=0, column=0, sticky=(N, S, E, W), padx=1, pady=1)
@@ -28,26 +28,29 @@ class TrocaMain(Tk):
         # Frame LOG TextBox
         # global frame1  -  Não foi necessário declarar frame1 como global, somente
         # passar a instancia dele para as outras classes :)
-        frame1 = frlog.FrameLog(self.mainFrame, self)
-        self.frames[frlog.FrameLog] = frame1
-        frame1.grid(row=0, column=1, sticky=(N, S, E, W))
+        self.frame1 = frlog.FrameLog(self.mainFrame, self)
+        self.frames[frlog.FrameLog] = self.frame1
+        self.frame1.grid(row=0, column=1, sticky=(N, S, E, W))
 
         # Frame Abre Arquivos
-        frame2 = frfiles.FrameAbreArquivos(self.mainFrame, self, frame1)
-        self.frames[frfiles.FrameAbreArquivos] = frame2
-        frame2.grid(row=1, column=0, sticky=(N, S, E, W), columnspan=2)
+        self.frame2 = frfiles.FrameAbreArquivos(self.mainFrame, self, self.frame1)
+        self.frames[frfiles.FrameAbreArquivos] = self.frame2
+        self.frame2.grid(row=1, column=0, sticky=(N, S, E, W), columnspan=2)
 
         # Frame Inicia Molecula
-        frame3 = frmolec.FrameIniciaMolecula(self.mainFrame, self, frame1, frame2)
-        self.frames[frmolec.FrameIniciaMolecula] = frame3
-        frame3.grid(row=0, column=0, sticky=(N, S, E, W))
+        self.frame3 = frmolec.FrameIniciaMolecula(self.mainFrame, self, self.frame1, self.frame2)
+        self.frames[frmolec.FrameIniciaMolecula] = self.frame3
+        self.frame3.grid(row=0, column=0, sticky=(N, S, E, W))
 
+        # Não é um frame, e por isso não precisa de grid. Popula diretamente a menubar.
+        self.frame4 = frmenu.MyMenu(self, self.frame1, self.frame3)
+        self.frames[frmenu.MyMenu] = self.frame4
+        
         # def on_closing():
         # Criar aqui o docstring
         #    if messagebox.askokcancel('Fechar', 'Gostaria de fechar o programa?'):
         #        inst.destroy()
         # Adicionar nesta função o lembrete das últimas opções utilizadas na corrida
-
 
 if __name__ == '__main__':
     myTroca = TrocaMain()
