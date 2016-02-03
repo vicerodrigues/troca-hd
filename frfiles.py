@@ -1,6 +1,6 @@
 from tkinter import *
 from tkinter import ttk
-from tkinter import filedialog
+# from tkinter import filedialog
 
 
 class FrameAbreArquivos(ttk.Frame):
