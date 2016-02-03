@@ -14,6 +14,9 @@ class FrameIniciaMolecula(ttk.Frame):
 
     def __init__(self, parent, controller, frame1, frame2):
         ttk.Frame.__init__(self, parent)
+        
+        # Inicializa a variável check
+        self.perdeutCheck = 0
 
         # Esta variável passada pela classe principal é a instância do logframe e permite
         # escrever no log.
@@ -144,6 +147,11 @@ class FrameIniciaMolecula(ttk.Frame):
         # Exemplo de log:
         # self.frame1.WriteLog('info', 'I Rock too')
 
+    def AtualizaPerdeutCheck(self,  perdeutCheck):
+        self.perdeutCheck = perdeutCheck
+    
+    
+    
     def AceitaMolecula(self, *args):
         """Função ligada ao botão Aceitar da descrição da molécula. Deve dar início ao cálculo da matriz de
             contribuições de 13C e liberar o acesso ao Frame de abertura de arquivos de massas. Se for pressionado
@@ -193,7 +201,12 @@ myCarbonNumber.get(), self.myHydNumber.get(), self.mySpecMin.get(), self.mySpecM
 
             # colocar aqui um if para somente liberar este botão caso esteja marcada a opção de utilizar o espectro
             # perdeuterado.
-            self.frame2.btnAbrePerdeuterado.configure(state='enabled')
+            if self.perdeutCheck == 1:
+                self.frame2.btnAbrePerdeuterado.configure(state='enabled')
+            elif self.perdeutCheck ==0:
+                self.frame2.btnAbrePerdeuterado.configure(state='disabled')
+            else:
+                raise ValueError('Problemas com o checkbutton que controla o uso do espectro perdeuterado.')
 
             self.frame2.btnAbrePeridrogenado.focus_force()
 
