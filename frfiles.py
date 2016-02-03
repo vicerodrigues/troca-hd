@@ -45,11 +45,16 @@ class FrameAbreArquivos(ttk.Frame):
         self.espectroPeridrogenado.configure(state='disabled')
 
         # Criando a ScrollBar e associando a TextBox
-        self.espectroPeridrogenadoScroll = ttk.Scrollbar(self.abrePeridrogenado, orient=VERTICAL,
+        self.espectroPeridrogenadoScrollV = ttk.Scrollbar(self.abrePeridrogenado, orient=VERTICAL,
                                                          command=self.espectroPeridrogenado.yview)
-        self.espectroPeridrogenadoScroll.grid(row=1, column=1, sticky=(N, S))
-        self.espectroPeridrogenado['yscrollcommand'] = self.espectroPeridrogenadoScroll.set
+        self.espectroPeridrogenadoScrollV.grid(row=1, column=1, sticky=(N, S))
+        self.espectroPeridrogenado['yscrollcommand'] = self.espectroPeridrogenadoScrollV.set
+        self.espectroPeridrogenadoScrollH = ttk.Scrollbar(self.abrePeridrogenado, orient=HORIZONTAL,
+                                                         command=self.espectroPeridrogenado.xview)
+        self.espectroPeridrogenadoScrollH.grid(row=2, column=0, sticky=(E, W))
+        self.espectroPeridrogenado['xscrollcommand'] = self.espectroPeridrogenadoScrollH.set
 
+        # Popula os frames de abertura de arquivos
         self.btnAbrePerdeuterado = ttk.Button(self.abrePerdeuterado, text='Abrir')
         self.btnAbrePerdeuterado.grid(row=0, column=0, columnspan=2, pady=(0, 5))
         self.btnAbrePerdeuterado.configure(state='disabled')
@@ -58,11 +63,16 @@ class FrameAbreArquivos(ttk.Frame):
         self.espectroPerdeuterado.configure(state='disabled')
 
         # Criando a ScrollBar e associando a TextBox
-        self.espectroPerdeuteradoScroll = ttk.Scrollbar(self.abrePerdeuterado, orient=VERTICAL,
+        self.espectroPerdeuteradoScrollV = ttk.Scrollbar(self.abrePerdeuterado, orient=VERTICAL,
                                                          command=self.espectroPerdeuterado.yview)
-        self.espectroPerdeuteradoScroll.grid(row=1, column=1, sticky=(N, S))
-        self.espectroPerdeuterado['yscrollcommand'] = self.espectroPerdeuteradoScroll.set
+        self.espectroPerdeuteradoScrollV.grid(row=1, column=1, sticky=(N, S))
+        self.espectroPerdeuterado['yscrollcommand'] = self.espectroPerdeuteradoScrollV.set
+        self.espectroPerdeuteradoScrollH = ttk.Scrollbar(self.abrePerdeuterado, orient=HORIZONTAL,
+                                                         command=self.espectroPerdeuterado.xview)
+        self.espectroPerdeuteradoScrollH.grid(row=2, column=0, sticky=(E, W))
+        self.espectroPerdeuterado['xscrollcommand'] = self.espectroPerdeuteradoScrollH.set
 
+        # Popula os frames de abertura de arquivos
         self.btnAbreMistura = ttk.Button(self.abreMistura, text='Abrir')
         self.btnAbreMistura.grid(row=0, column=0, columnspan=2, pady=(0, 5))
         self.btnAbreMistura.configure(state='disabled')
@@ -71,7 +81,11 @@ class FrameAbreArquivos(ttk.Frame):
         self.espectroMistura.configure(state='disabled')
 
         # Criando a ScrollBar e associando a TextBox
-        self.espectroMisturaScroll = ttk.Scrollbar(self.abreMistura, orient=VERTICAL,
+        self.espectroMisturaScrollV = ttk.Scrollbar(self.abreMistura, orient=VERTICAL,
                                                          command=self.espectroMistura.yview)
-        self.espectroMisturaScroll.grid(row=1, column=1, sticky=(N, S))
-        self.espectroMistura['yscrollcommand'] = self.espectroMisturaScroll.set
+        self.espectroMisturaScrollV.grid(row=1, column=1, sticky=(N, S))
+        self.espectroMistura['yscrollcommand'] = self.espectroMisturaScrollV.set
+        self.espectroMisturaScrollH = ttk.Scrollbar(self.abreMistura, orient=HORIZONTAL,
+                                                         command=self.espectroMistura.xview)
+        self.espectroMisturaScrollH.grid(row=2, column=0, sticky=(E, W))
+        self.espectroMistura['xscrollcommand'] = self.espectroMisturaScrollH.set

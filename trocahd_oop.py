@@ -4,7 +4,7 @@ from tkinter import *
 from tkinter import ttk
 import frmolec
 import frlog
-import frfiles
+import frfiles, frmenu
 
 
 # import tkinter.messagebox as messagebox
@@ -15,10 +15,6 @@ class TrocaMain(Tk):
         Nesta classe é criado o frame principal e são chamadas as classes que criam
         os frames secundários que criam as demais partes do programa.
     """
-    
-    def AtualizaPerdeutCheck(self):
-        self.frame3.AtualizaPerdeutCheck(self.perdeutCheck.get())
-        #print('IntVar é %i' %self.perdeutCheck.get())
         
     def __init__(self, *args, **kwargs):
         Tk.__init__(self, *args, **kwargs)
@@ -46,19 +42,9 @@ class TrocaMain(Tk):
         self.frames[frmolec.FrameIniciaMolecula] = self.frame3
         self.frame3.grid(row=0, column=0, sticky=(N, S, E, W))
 
-        self.option_add('*tearOff',  FALSE)
-        self.menubar = Menu(self)
-        self['menu'] = self.menubar
-        self.menu_file = Menu(self.menubar)
-        self.menu_options = Menu(self.menubar)
-        self.menubar.add_cascade(menu=self.menu_file,  label='Arquivo')
-        self.menubar.add_cascade(menu=self.menu_options,  label='Opções')
-        
-        self.perdeutCheck = IntVar()
-        self.perdeutCheck.set(0)
-        self.menu_options.add_checkbutton(label='Usar perdeuterado',  variable=self.\
-perdeutCheck,  onvalue=1,  offvalue=0,  command=self.AtualizaPerdeutCheck)
-        
+        # Não é um frame, e por isso não precisa de grid. Popula diretamente a menubar.
+        self.frame4 = frmenu.MyMenu(self, self.frame1, self.frame3)
+        self.frames[frmenu.MyMenu] = self.frame4
         
         # def on_closing():
         # Criar aqui o docstring
