@@ -14,6 +14,9 @@ class MyMenu:
         parent.option_add('*tearOff',  FALSE)
         self.menubar = Menu(parent)
         parent['menu'] = self.menubar
+        
+        # Adicionada esta conf para melhorar o visual no Mint que mostrava a menubar alta em relação ao resto
+        self.menubar.config(relief='flat')
 
         self.menu_file = Menu(self.menubar)
         self.menu_options = Menu(self.menubar)
