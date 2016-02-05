@@ -3,9 +3,7 @@
 -IMPLEMENTAR UM CAIXA DE TEXTO COM SCROLL PARA MOSTRAR LOG DO PROGRAMA: o mesmo deve poder ser salvo em um arquivo
  log
 
--Uma idéia interessante é permitir, através de um menu, modificar o nível de LOG do sistema
-
--Incluir no menu uma checkbox para utilização do espectro perdeuterado
+-Uma idéia interessante é permitir, através de um menu, modificar o nível de LOG do sistema - Em andamento
 
 -Utilizar uma classe para abrir os arquivos dps espectros. A classe que cria os frames de cada um dos espectros herda desta.
 Para o perdeuterado ainda haverá uma nova herdeira para implementar a desativação. Cada um dos frames será uma instância.
