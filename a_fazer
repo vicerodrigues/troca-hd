@@ -7,6 +7,14 @@
 
 -Incluir no menu uma checkbox para utilização do espectro perdeuterado
 
+-Utilizar uma classe para abrir os arquivos dps espectros. A classe que cria os frames de cada um dos espectros herda desta.
+Para o perdeuterado ainda haverá uma nova herdeira para implementar a desativação. Cada um dos frames será uma instância.
+
+-Utilizar n+1 threads para calcular os espectros das diferentes espécies deuteradas.
+
+-Implementar a janela result viewer como uma thread para manter o acesso a janela principal. Ela deve ser fechada junto com 
+a janela principal e ser criada com o clique do botão
+
 
 
 Na fila imediata:
