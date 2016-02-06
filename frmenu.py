@@ -14,36 +14,39 @@ class MyMenu:
         parent.option_add('*tearOff',  FALSE)
         self.menubar = Menu(parent)
         parent['menu'] = self.menubar
+        
+        # Adicionada esta conf para melhorar o visual no Mint que mostrava a menubar alta em relação ao resto
+        self.menubar.config(relief='flat')
 
         self.menu_file = Menu(self.menubar)
         self.menu_options = Menu(self.menubar)
         self.menu_help = Menu(self.menubar)
 
-        self.menubar.add_cascade(menu=self.menu_file, label='Arquivo')
-        self.menubar.add_cascade(menu=self.menu_options, label='Opções')
-        self.menubar.add_cascade(menu=self.menu_help, label='Ajuda')
+        self.menubar.add_cascade(menu=self.menu_file, label='Arquivo', underline=0)
+        self.menubar.add_cascade(menu=self.menu_options, label='Opções', underline=0)
+        self.menubar.add_cascade(menu=self.menu_help, label='Ajuda', underline=1)
 
-        self.menu_file.add_command(label='Reset') # implementar o command: , command)
-        self.menu_file.add_command(label='Full-Reset') # implementar o command: , command)
+        self.menu_file.add_command(label='Reset', accelerator="Ctrl+R", underline=0) # implementar o command: , command)
+        self.menu_file.add_command(label='Full-Reset', accelerator="Shift+Ctrl+R", underline=1) # implementar o command: , command)
         self.menu_file.add_separator()
-        self.menu_file.add_command(label='Fechar') # implementar o command: , command)
+        self.menu_file.add_command(label='Fechar', accelerator="Ctrl+Q", underline=0) # implementar o command: , command)
 
         self.perdeutCheck = IntVar()
         self.perdeutCheck.set(0)
         self.menu_options.add_checkbutton(label='Usar perdeuterado',  variable=self.perdeutCheck,  onvalue=1,
-                                          offvalue=0,  command=self.AtualizaPerdeutCheck)
+                                          offvalue=0,  command=self.AtualizaPerdeutCheck, underline=5)
         self.menu_options.add_separator()
         self.menu_log = Menu(self.menu_options)
-        self.menu_options.add_cascade(menu=self.menu_log, label='Nível de Log:')
+        self.menu_options.add_cascade(menu=self.menu_log, label='Nível de Log:', underline=9)
         self.logRadiobutton = IntVar()
         self.logRadiobutton.set(2)
-        self.menu_log.add_radiobutton(label='Debug', variable=self.logRadiobutton, value=1)
-        self.menu_log.add_radiobutton(label='Info', variable=self.logRadiobutton, value=2)
-        self.menu_log.add_radiobutton(label='Warn', variable=self.logRadiobutton, value=3)
-        self.menu_log.add_radiobutton(label='Error', variable=self.logRadiobutton, value=4)
-        self.menu_log.add_radiobutton(label='Critical', variable=self.logRadiobutton, value=5)
+        self.menu_log.add_radiobutton(label='Debug', variable=self.logRadiobutton, value=1, underline=0)
+        self.menu_log.add_radiobutton(label='Info', variable=self.logRadiobutton, value=2, underline=0)
+        self.menu_log.add_radiobutton(label='Warn', variable=self.logRadiobutton, value=3, underline=0)
+        self.menu_log.add_radiobutton(label='Error', variable=self.logRadiobutton, value=4, underline=0)
+        self.menu_log.add_radiobutton(label='Critical', variable=self.logRadiobutton, value=5, underline=0)
 
-        self.menu_help.add_command(label='Sobre') # implementar o command: , command)
+        self.menu_help.add_command(label='Sobre', underline=0) # implementar o command: , command)
 
     def AtualizaPerdeutCheck(self):
 

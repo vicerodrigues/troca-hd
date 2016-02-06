@@ -3,9 +3,15 @@
 -IMPLEMENTAR UM CAIXA DE TEXTO COM SCROLL PARA MOSTRAR LOG DO PROGRAMA: o mesmo deve poder ser salvo em um arquivo
  log
 
--Uma idéia interessante é permitir, através de um menu, modificar o nível de LOG do sistema
+-Uma idéia interessante é permitir, através de um menu, modificar o nível de LOG do sistema - Em andamento
 
--Incluir no menu uma checkbox para utilização do espectro perdeuterado
+-Utilizar uma classe para abrir os arquivos dps espectros. A classe que cria os frames de cada um dos espectros herda desta.
+Para o perdeuterado ainda haverá uma nova herdeira para implementar a desativação. Cada um dos frames será uma instância.
+
+-Utilizar n+1 threads para calcular os espectros das diferentes espécies deuteradas.
+
+-Implementar a janela result viewer como uma thread para manter o acesso a janela principal. Ela deve ser fechada junto com 
+a janela principal e ser criada com o clique do botão
 
 
 
@@ -13,5 +19,4 @@ Na fila imediata:
     -Criar o frame para abrir os arquivos dos espectros frfiles
     -Criar leitor de planilha excel e texto (future) dos arquivos
     -Criar as funções e interações dos menus da janela principal com os frames
-    -Criar os scrolls horizontais das caixas de texto em frfiles
     -Desabilitar o acesso a frmolec depois de clicar em Aceitar, a não ser que o usuário faça um reset :)

@@ -89,3 +89,4 @@ class FrameAbreArquivos(ttk.Frame):
                                                          command=self.espectroMistura.xview)
         self.espectroMisturaScrollH.grid(row=2, column=0, sticky=(E, W))
         self.espectroMistura['xscrollcommand'] = self.espectroMisturaScrollH.set
+

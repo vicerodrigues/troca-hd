@@ -20,7 +20,8 @@ class TrocaMain(Tk):
         Tk.__init__(self, *args, **kwargs)
         
         # Inicia frame mestre em self
-        self.mainFrame = ttk.Frame(self, relief=RAISED, borderwidth=2)
+        self.mainFrame = ttk.Frame(self, relief='ridge', borderwidth=2) # Retirada a opção de relief:
+                                                                        #, relief=RAISED, borderwidth=2)
         self.mainFrame.grid(row=0, column=0, sticky=(N, S, E, W), padx=1, pady=1)
 
         self.frames = {}
