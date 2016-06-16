@@ -2,13 +2,12 @@ from tkinter import *
 from tkinter import ttk
 import logging
 
-
 class FrameLog(ttk.Frame, logging.Handler):
     """Esta classe cria o frame onde é mostrado o TextBox de log do programa.
         O loglevel está setado para info inicialmente.
     """
 
-    def __init__(self, parent, controller):
+    def __init__(self, parent):
 
         ttk.Frame.__init__(self, parent)
 

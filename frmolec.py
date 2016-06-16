@@ -1,10 +1,9 @@
 from tkinter import *
 from tkinter import ttk
 import tkinter.messagebox as messagebox
-import molec
-import c13matrix
+import frlog,frfiles
+import molec,c13matrix
 import logging
-
 
 class FrameIniciaMolecula(ttk.Frame):
     """Esta classe cria o frame onde é iniciada a molécula CxHy e os limites do espectro
@@ -12,20 +11,21 @@ class FrameIniciaMolecula(ttk.Frame):
         de massas consideradas.
     """
 
-    def __init__(self, parent, controller, frame1, frame2):
+    def __init__(self, parent, controller):
+
         ttk.Frame.__init__(self, parent)
         
+        self.controller = controller
+
         # Inicializa a variável check
         self.perdeutCheck = 0
 
         # Esta variável passada pela classe principal é a instância do logframe e permite
         # escrever no log.
-        self.frame1 = frame1
-        self.frame1.WriteLog('info', 'Iniciando Frames de descrição da molécula e espectro.')
+        self.controller.frames[frlog.FrameLog].WriteLog('info', 'Iniciando Frames de descrição da molécula e espectro.')
 
         # Esta variável passada pela classe principal é a instância de frame de abrir arquivos e permite
         # que frmolec interaja com os botões habilitando-os
-        self.frame2 = frame2
 
         # Inicia o frame da classe
         self.iniciaMolec = ttk.Frame(self, padding=(5, 5, 5, 6), relief=RIDGE, borderwidth=2)
@@ -76,7 +76,7 @@ class FrameIniciaMolecula(ttk.Frame):
         self.lbl5.grid(row=1, column=3, pady=(3, 6))
 
         # Inicia as variáveis das massas moleculares e número de pontos
-        self.frame1.WriteLog('info', 'Calculando massas moleculares e número de pontos.')
+        self.controller.frames[frlog.FrameLog].WriteLog('info', 'Calculando massas moleculares e número de pontos.')
 
         self.myMMH = IntVar()
         self.myMMD = IntVar()
@@ -131,7 +131,7 @@ class FrameIniciaMolecula(ttk.Frame):
         # INFO: Adicionar aqui algum mecanismo para que escreva o log só na primeira mudança!
 
         myMolec = molec.IniciaMolecula(self.myCarbonNumber.get(), self.myHydNumber.get(), self.mySpecMin.get(),
-                                       self.mySpecMax.get(), self.frame1, self.mySpecWarn, self.mySupraWarn,
+                                       self.mySpecMax.get(), self.controller.frames[frlog.FrameLog], self.mySpecWarn, self.mySupraWarn,
                                        self.myMetilaWarn, self.myFaixaWarn)
         self.myMMH.set(myMolec.MMH)
         self.myMMD.set(myMolec.MMD)
@@ -164,50 +164,53 @@ class FrameIniciaMolecula(ttk.Frame):
             if self.nPoints.get() <= self.myHydNumber.get()+1:
                 messagebox.showinfo(title='Erro', message='Sistema supra-determinado', detail="O número mínimo de \
 pontos a serem considerados deve ser maior que o número de H's +1", icon='error')
-                self.frame1.text_handler.setFormatter(logging.Formatter('%(message)s'))
-                self.frame1.WriteLog('info', ' '*11+'Inicializando molécula:'+' '*11+'\n'*2)
-                self.frame1.text_handler.setFormatter(logging.Formatter(self.frame1.format_))
-                self.frame1.WriteLog('critical', "Sistema supra-determinado: O número mínimo de pontos a serem "
+                self.controller.frames[frlog.FrameLog].text_handler.setFormatter(logging.Formatter('%(message)s'))
+                self.controller.frames[frlog.FrameLog].WriteLog('info', ' '*11+'Inicializando molécula:'+' '*11+'\n'*2)
+                self.controller.frames[frlog.FrameLog].text_handler.setFormatter(logging.Formatter(self.controller.\
+                    frames[frlog.FrameLog].format_))
+                self.controller.frames[frlog.FrameLog].WriteLog('critical', "Sistema supra-determinado: O número mínimo de pontos a serem "
                                                  "considerados deve ser maior que o número de H's +1")
-                self.frame1.WriteLog('critical', 'Não será dado prosseguimento a execução do programa!')
-                self.frame1.WriteLog('info', 'Corrija o número de pontos e clique em aceitar novamente.')
+                self.controller.frames[frlog.FrameLog].WriteLog('critical', 'Não será dado prosseguimento a execução do programa!')
+                self.controller.frames[frlog.FrameLog].WriteLog('info', 'Corrija o número de pontos e clique em aceitar novamente.')
                 break
 
             # Descreve a molécula e o espectro no log.
-            self.frame1.text_handler.setFormatter(logging.Formatter('%(message)s'))
-            self.frame1.WriteLog('info', ' '*11+'Inicializando molécula:'+' '*11+'\n'*2)
-            self.frame1.text_handler.setFormatter(logging.Formatter(self.frame1.format_))
-            self.frame1.WriteLog('info', 'Molécula: C%iH%i\n     Espectro: -Min:%i\n               -Max:%i' %(self.\
+            self.controller.frames[frlog.FrameLog].text_handler.setFormatter(logging.Formatter('%(message)s'))
+            self.controller.frames[frlog.FrameLog].WriteLog('info', ' '*11+'Inicializando molécula:'+' '*11+'\n'*2)
+            self.controller.frames[frlog.FrameLog].text_handler.setFormatter(logging.Formatter(self.controller.\
+                frames[frlog.FrameLog].format_))
+            self.controller.frames[frlog.FrameLog].WriteLog('info', 'Molécula: C%iH%i\n     Espectro: -Min:%i\n               -Max:%i' %(self.\
 myCarbonNumber.get(), self.myHydNumber.get(), self.mySpecMin.get(), self.mySpecMax.get()))
 
             # Anuncia o cálculo da matriz de 13C
-            self.frame1.WriteLog('info', 'Calculando a matriz de contribuições de 13C na molécula.')
+            self.controller.frames[frlog.FrameLog].WriteLog('info', 'Calculando a matriz de contribuições de 13C na molécula.')
             # Resgata o valor da Matriz de 13C do módulo c13matrix
             self.myC13Matrix = c13matrix.C13Matrix(self.myCarbonNumber.get()).CalcC13Matrix
 
-            self.frame1.WriteLog('info', 'Imprimindo a matrix de contribuições de 13C:')
-            self.frame1.text_handler.setFormatter(logging.Formatter('%(message)s'))
+            self.controller.frames[frlog.FrameLog].WriteLog('info', 'Imprimindo a matrix de contribuições de 13C:')
+            self.controller.frames[frlog.FrameLog].text_handler.setFormatter(logging.Formatter('%(message)s'))
 
             for i in range(self.myCarbonNumber.get()+1):
-                self.frame1.WriteLog('info', ' '*7 + '13C [%i]:' %i + '%.10f' %self.myC13Matrix[i] + '\n')
-            self.frame1.WriteLog('info', '\n')
-            self.frame1.text_handler.setFormatter(logging.Formatter(self.frame1.format_))
+                self.controller.frames[frlog.FrameLog].WriteLog('info', ' '*7 + '13C [%i]:' %i + '%.10f' %self.myC13Matrix[i] + '\n')
+            self.controller.frames[frlog.FrameLog].WriteLog('info', '\n')
+            self.controller.frames[frlog.FrameLog].text_handler.setFormatter(logging.Formatter(self.controller.frames[frlog.FrameLog].\
+                format_))
 
-            self.frame1.WriteLog('info', 'Habilitando os botões para abrir os arquivos de espectros de massas')
+            self.controller.frames[frlog.FrameLog].WriteLog('info', 'Habilitando os botões para abrir os arquivos de espectros de massas')
 
             # habilitando os botões
-            self.frame2.btnAbrePeridrogenado.configure(state='enabled')
-            self.frame2.btnAbreMistura.configure(state='enabled')
+            self.controller.frames[frfiles.FrameAbreArquivos].btnAbrePeridrogenado.configure(state='enabled')
+            self.controller.frames[frfiles.FrameAbreArquivos].btnAbreMistura.configure(state='enabled')
 
             # colocar aqui um if para somente liberar este botão caso esteja marcada a opção de utilizar o espectro
             # perdeuterado.
             if self.perdeutCheck == 1:
-                self.frame2.btnAbrePerdeuterado.configure(state='enabled')
+                self.controller.frames[frfiles.FrameAbreArquivos].btnAbrePerdeuterado.configure(state='enabled')
             elif self.perdeutCheck ==0:
-                self.frame2.btnAbrePerdeuterado.configure(state='disabled')
+                self.controller.frames[frfiles.FrameAbreArquivos].btnAbrePerdeuterado.configure(state='disabled')
             else:
                 raise ValueError('Problemas com o checkbutton que controla o uso do espectro perdeuterado.')
 
-            self.frame2.btnAbrePeridrogenado.focus_force()
+            self.controller.frames[frfiles.FrameAbreArquivos].btnAbrePeridrogenado.focus_force()
 
             break

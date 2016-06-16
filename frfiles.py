@@ -1,9 +1,9 @@
 from tkinter import *
 from tkinter import ttk
 from tkinter import filedialog
-import importarquivo
 import os
-
+import frlog
+import importarquivo
 
 class FrameAbreArquivos(ttk.Frame):
     """Esta classe cria o frame onde é são abertos os arquivos contendo os espectros de massas dos compostos
@@ -11,13 +11,15 @@ class FrameAbreArquivos(ttk.Frame):
         através do módulo ......
     """
 
-    def __init__(self, parent, controller, frame1):
+    def __init__(self, parent, controller):
         ttk.Frame.__init__(self, parent)
+
+        self.controller = controller
 
         # Esta variável passada pela classe principal é a instância do logframe e permite
         # escrever no log.
-        self.frame1 = frame1
-        self.frame1.WriteLog('info', 'Iniciando Frames de abertura dos arquivos contendo os espectros de massas.')
+
+        self.controller.frames[frlog.FrameLog].WriteLog('info', 'Iniciando Frames de abertura dos arquivos contendo os espectros de massas.')
 
         # Iniciando o frame da classe
         self.abreArquivos = ttk.Frame(self, padding=(5, 5, 5, 5), relief=RIDGE, borderwidth=2)
@@ -58,7 +60,8 @@ class FrameAbreArquivos(ttk.Frame):
         self.espectroPeridrogenado['xscrollcommand'] = self.espectroPeridrogenadoScrollH.set
 
         # Popula os frames de abertura de arquivos
-        self.btnAbrePerdeuterado = ttk.Button(self.abrePerdeuterado, text='Abrir')
+        self.btnAbrePerdeuterado = ttk.Button(self.abrePerdeuterado, text='Abrir', command=lambda: self.abreEspectro\
+            ('perdeuterado'))
         self.btnAbrePerdeuterado.grid(row=0, column=0, columnspan=2, pady=(0, 5))
         self.btnAbrePerdeuterado.configure(state='disabled')
         self.espectroPerdeuterado = Text(self.abrePerdeuterado, width=20, height=11, wrap='none')
@@ -76,7 +79,8 @@ class FrameAbreArquivos(ttk.Frame):
         self.espectroPerdeuterado['xscrollcommand'] = self.espectroPerdeuteradoScrollH.set
 
         # Popula os frames de abertura de arquivos
-        self.btnAbreMistura = ttk.Button(self.abreMistura, text='Abrir')
+        self.btnAbreMistura = ttk.Button(self.abreMistura, text='Abrir', command=lambda: self.abreEspectro\
+            ('mistura'))
         self.btnAbreMistura.grid(row=0, column=0, columnspan=2, pady=(0, 5))
         self.btnAbreMistura.configure(state='disabled')
         self.espectroMistura = Text(self.abreMistura, width=20, height=11, wrap='none')
@@ -94,8 +98,40 @@ class FrameAbreArquivos(ttk.Frame):
         self.espectroMistura['xscrollcommand'] = self.espectroMisturaScrollH.set
 
     def abreEspectro(self, tipo):
-        if tipo == 'peridrogenado':
-            self.peridrogenado = importarquivo.IniciaArquivo()
+
+        self.tipo = tipo
+        if self.tipo == 'peridrogenado':
+            self.peridrogenado = importarquivo.IniciaArquivo(tipo).AbreArquivo()
+            self.populaTextbox(self.tipo)
+        elif self.tipo == 'perdeuterado':
+            self.perdeuterado = importarquivo.IniciaArquivo(tipo).AbreArquivo()
+            self.populaTextbox(self.tipo)
+        elif self.tipo == 'mistura':
+            self.mistura = importarquivo.IniciaArquivo(tipo).AbreArquivo()
+            self.populaTextbox(self.tipo)
+        else:
+            self.controller.frames[frlog.FrameLog].WriteLog('critical', 'Tipo de espectro inesperado!')
+
+    def populaTextbox(self, tipo):
+
+        self.tipo = tipo
+
+        if self.tipo == 'peridrogenado':
+            self.espectroPeridrogenado.configure(state='normal')
+            self.espectroPeridrogenado.insert('end', '\n'.join(str(x) for x in self.peridrogenado))
+            self.espectroPeridrogenado.configure(state='disabled')
+        elif self.tipo == 'perdeuterado':
+            self.espectroPerdeuterado.configure(state='normal')
+            self.espectroPerdeuterado.insert('end', '\n'.join(str(x) for x in self.perdeuterado))
+            self.espectroPerdeuterado.configure(state='disabled')
+        elif self.tipo == 'mistura':
+            self.espectroMistura.configure(state='normal')
+            self.espectroMistura.insert('end', '\n'.join(str(x) for x in self.mistura))
+            self.espectroMistura.configure(state='disabled')
 
 
 
+
+
+
+        

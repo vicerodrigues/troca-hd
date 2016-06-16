@@ -1,19 +1,20 @@
 from tkinter import *
-
+import frmolec
 
 class MyMenu:
     """Esta classe cria um menu para a janela principal onde são passadas opções e comandos ao programa: ele poderá
         ser resetado (reset e full-reset), mudar o nível de log, fechar o programa........
     """
 
-    def __init__(self, parent, frame1, frame3):
-        self.frame1 = frame1
-        self.frame3 = frame3
+    def __init__(self, parent, controller):
+
+        self.parent = parent
+        self.controller = controller
 
         # Criando a menubar na janela principal e adicionando os menus
-        parent.option_add('*tearOff',  FALSE)
+        self.parent.option_add('*tearOff',  FALSE)
         self.menubar = Menu(parent)
-        parent['menu'] = self.menubar
+        self.parent['menu'] = self.menubar
         
         # Adicionada esta conf para melhorar o visual no Mint que mostrava a menubar alta em relação ao resto
         self.menubar.config(relief='flat')
@@ -29,7 +30,8 @@ class MyMenu:
         self.menu_file.add_command(label='Reset', accelerator="Ctrl+R", underline=0) # implementar o command: , command)
         self.menu_file.add_command(label='Full-Reset', accelerator="Shift+Ctrl+R", underline=1) # implementar o command: , command)
         self.menu_file.add_separator()
-        self.menu_file.add_command(label='Fechar', accelerator="Ctrl+Q", underline=0) # implementar o command: , command)
+        self.menu_file.add_command(label='Fechar', accelerator="Ctrl+Q", underline=0, command = lambda: self.parent.\
+            on_closing()) # implementar o command: , command)
 
         self.perdeutCheck = IntVar()
         self.perdeutCheck.set(0)
@@ -50,4 +52,4 @@ class MyMenu:
 
     def AtualizaPerdeutCheck(self):
 
-        self.frame3.AtualizaPerdeutCheck(self.perdeutCheck.get())
+        self.parent.frames[frmolec.FrameIniciaMolecula].AtualizaPerdeutCheck(self.perdeutCheck.get())
