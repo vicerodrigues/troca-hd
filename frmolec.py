@@ -19,7 +19,7 @@ class FrameIniciaMolecula(ttk.Frame):
 
         # Inicializa a variável check e accepted Molec
         self.perdeutCheck = 0
-        self.accepetedMolec = False
+        self.accpetedMolec = False
 
         # Esta variável passada pela classe principal é a instância do logframe e permite
         # escrever no log.
@@ -150,7 +150,7 @@ class FrameIniciaMolecula(ttk.Frame):
 
     def AtualizaPerdeutCheck(self,  perdeutCheck):
         self.perdeutCheck = perdeutCheck
-        if self.accepetedMolec == True:
+        if self.acceptedMolec == True:
             if self.perdeutCheck == 1:
                 self.controller.frames[frfiles.FrameAbreArquivos].btnAbrePerdeuterado.configure(state='enabled')
             elif self.perdeutCheck ==0:
@@ -209,10 +209,17 @@ myCarbonNumber.get(), self.myHydNumber.get(), self.mySpecMin.get(), self.mySpecM
                 format_))
 
             self.controller.frames[frlog.FrameLog].WriteLog('info', 'Habilitando os botões para abrir os arquivos de espectros de massas')
+            self.controller.frames[frlog.FrameLog].WriteLog('info', 'Desabilitando o frame de descrição da molécula e espectro')
 
             # habilitando os botões
             self.controller.frames[frfiles.FrameAbreArquivos].btnAbrePeridrogenado.configure(state='enabled')
             self.controller.frames[frfiles.FrameAbreArquivos].btnAbreMistura.configure(state='enabled')
+
+            # Desabilitando o frmolec:
+            self.carbonNumber.configure(state='disabled')
+            self.hydNumber.configure(state='disabled')
+            self.specMin.configure(state='disabled')
+            self.specMax.configure(state='disabled')
 
             # colocar aqui um if para somente liberar este botão caso esteja marcada a opção de utilizar o espectro
             # perdeuterado.

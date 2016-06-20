@@ -2,7 +2,7 @@ from tkinter import *
 from tkinter import ttk
 from tkinter import filedialog
 import os
-import frlog,frmenu
+import frlog,frmenu,frmolec
 import importarquivo
 
 class FrameAbreArquivos(ttk.Frame):
@@ -126,23 +126,33 @@ class FrameAbreArquivos(ttk.Frame):
         self.tipo = tipo
         if self.tipo == 'peridrogenado':
             self.peridrogenado = importarquivo.IniciaArquivo(tipo).AbreArquivo()
-            self.populaTextbox(self.tipo)
-            if self.controller.frames[frmenu.MyMenu].perdeutCheck.get() == 1:
-                self.btnAbrePerdeuterado.focus_force()
+            if self.peridrogenado.shape[0] == self.controller.frames[frmolec.FrameIniciaMolecula].nPoints.get():
+                self.populaTextbox(self.tipo)
+                if self.controller.frames[frmenu.MyMenu].perdeutCheck.get() == 1:
+                    self.btnAbrePerdeuterado.focus_force()
+                else:
+                    self.btnAbreMistura.focus_force()
             else:
-                self.btnAbreMistura.focus_force()
+                self.controller.frames[frlog.FrameLog].WriteLog('error',\
+                     'O tamanho do espectro não condiz com o esperado! Verifique a faixa do espectro e o arquivo.')
         elif self.tipo == 'perdeuterado':
             self.perdeuterado = importarquivo.IniciaArquivo(tipo).AbreArquivo()
-            self.populaTextbox(self.tipo)
-            self.btnAbreMistura.focus_force()
+            if self.perdeuterado.shape[0] == self.controller.frames[frmolec.FrameIniciaMolecula].nPoints.get():
+                self.populaTextbox(self.tipo)
+                self.btnAbreMistura.focus_force()
+            else:
+                self.controller.frames[frlog.FrameLog].WriteLog('error',\
+                     'O tamanho do espectro não condiz com o esperado! Verifique a faixa do espectro e o arquivo.')
         elif self.tipo == 'mistura':
             self.mistura = importarquivo.IniciaArquivo(tipo).AbreArquivo()
-            self.populaTextbox(self.tipo)
+            if self.mistura.shape[0] == self.controller.frames[frmolec.FrameIniciaMolecula].nPoints.get():
+                self.populaTextbox(self.tipo)
+            else:
+                self.controller.frames[frlog.FrameLog].WriteLog('error',\
+                     'O tamanho do espectro não condiz com o esperado! Verifique a faixa do espectro e o arquivo.')
         else:
             self.controller.frames[frlog.FrameLog].WriteLog('critical', 'Tipo de espectro inesperado!')
-
         self.checkTratarEspectros()
-
 
     def populaTextbox(self, tipo):
 

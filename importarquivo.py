@@ -26,6 +26,6 @@ class IniciaArquivo:
         # Abre arquivo e passa para self.filename
         self.filename = filedialog.askopenfilename(**self.file_opt)
 
-        self.myArray =  arrays.IO_Array(self.filename).create_array()
+        self.myArray =  arrays.IO_Array(self.filename).create_array()[1:]
 
         return self.myArray
