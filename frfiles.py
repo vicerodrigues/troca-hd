@@ -2,7 +2,7 @@ from tkinter import *
 from tkinter import ttk
 from tkinter import filedialog
 import os
-import frlog
+import frlog,frmenu
 import importarquivo
 
 class FrameAbreArquivos(ttk.Frame):
@@ -43,6 +43,7 @@ class FrameAbreArquivos(ttk.Frame):
         # Popula os frames de abertura de arquivos
         self.btnAbrePeridrogenado = ttk.Button(self.abrePeridrogenado, text='Abrir', command=lambda: self.abreEspectro\
             ('peridrogenado'))
+        self.btnAbrePeridrogenado.bind('<Return>', lambda x: self.abreEspectro('peridrogenado'))
         self.btnAbrePeridrogenado.grid(row=0, column=0, columnspan=2, pady=(0, 5))
         self.btnAbrePeridrogenado.configure(state='disabled')
         self.espectroPeridrogenado = Text(self.abrePeridrogenado, width=20, height=11, wrap='none')
@@ -62,6 +63,7 @@ class FrameAbreArquivos(ttk.Frame):
         # Popula os frames de abertura de arquivos
         self.btnAbrePerdeuterado = ttk.Button(self.abrePerdeuterado, text='Abrir', command=lambda: self.abreEspectro\
             ('perdeuterado'))
+        self.btnAbrePerdeuterado.bind('<Return>', lambda x: self.abreEspectro('perdeuterado'))
         self.btnAbrePerdeuterado.grid(row=0, column=0, columnspan=2, pady=(0, 5))
         self.btnAbrePerdeuterado.configure(state='disabled')
         self.espectroPerdeuterado = Text(self.abrePerdeuterado, width=20, height=11, wrap='none')
@@ -81,6 +83,7 @@ class FrameAbreArquivos(ttk.Frame):
         # Popula os frames de abertura de arquivos
         self.btnAbreMistura = ttk.Button(self.abreMistura, text='Abrir', command=lambda: self.abreEspectro\
             ('mistura'))
+        self.btnAbreMistura.bind('<Return>', lambda x: self.abreEspectro('mistura'))
         self.btnAbreMistura.grid(row=0, column=0, columnspan=2, pady=(0, 5))
         self.btnAbreMistura.configure(state='disabled')
         self.espectroMistura = Text(self.abreMistura, width=20, height=11, wrap='none')
@@ -97,20 +100,49 @@ class FrameAbreArquivos(ttk.Frame):
         self.espectroMisturaScrollH.grid(row=2, column=0, sticky=(E, W))
         self.espectroMistura['xscrollcommand'] = self.espectroMisturaScrollH.set
 
+        self.myPadX = 35
+        self.myPadY = 5
+
+        self.btnTratarEspectros = ttk.Button(self.abreArquivos, text='Corrigir espectros', command=lambda: \
+            self.trataEspectros(), state='disabled')
+        self.btnTratarEspectros.bind('<Return>', lambda x: self.trataEspectros())
+        self.btnTratarEspectros.grid(row=3, column=0, padx=(self.myPadX,self.myPadX), pady=(self.myPadY,self.myPadY-5)\
+            , sticky='EW')
+
+        self.btnSaveMS = ttk.Button(self.abreArquivos, text='Salvar MS', command=lambda: self.salvarMS(),\
+             state='disabled')
+        self.btnSaveMS.bind('<Return>', lambda x: self.salvarMS())
+        self.btnSaveMS.grid(row=3, column=1, padx=(self.myPadX,self.myPadX), pady=(self.myPadY,self.myPadY-5)\
+            , sticky='EW')
+
+        self.btnSimular = ttk.Button(self.abreArquivos, text='Simular', command=lambda: self.simularEspectros(),\
+             state='disabled')
+        self.btnSimular.bind('<Return>', lambda x: self.simularEspectros())
+        self.btnSimular.grid(row=3, column=2, padx=(self.myPadX,self.myPadX), pady=(self.myPadY,self.myPadY-5)\
+            , sticky='EW')
+
     def abreEspectro(self, tipo):
 
         self.tipo = tipo
         if self.tipo == 'peridrogenado':
             self.peridrogenado = importarquivo.IniciaArquivo(tipo).AbreArquivo()
             self.populaTextbox(self.tipo)
+            if self.controller.frames[frmenu.MyMenu].perdeutCheck.get() == 1:
+                self.btnAbrePerdeuterado.focus_force()
+            else:
+                self.btnAbreMistura.focus_force()
         elif self.tipo == 'perdeuterado':
             self.perdeuterado = importarquivo.IniciaArquivo(tipo).AbreArquivo()
             self.populaTextbox(self.tipo)
+            self.btnAbreMistura.focus_force()
         elif self.tipo == 'mistura':
             self.mistura = importarquivo.IniciaArquivo(tipo).AbreArquivo()
             self.populaTextbox(self.tipo)
         else:
             self.controller.frames[frlog.FrameLog].WriteLog('critical', 'Tipo de espectro inesperado!')
+
+        self.checkTratarEspectros()
+
 
     def populaTextbox(self, tipo):
 
@@ -129,6 +161,39 @@ class FrameAbreArquivos(ttk.Frame):
             self.espectroMistura.insert('end', '\n'.join(str(x) for x in self.mistura))
             self.espectroMistura.configure(state='disabled')
 
+    def checkTratarEspectros(self):
+        if self.controller.frames[frmenu.MyMenu].perdeutCheck.get() == 1:
+            if (self.espectroPeridrogenado.get(1.0, END) != '\n') & (self.espectroPerdeuterado.get(1.0, END)\
+             != '\n') & (self.espectroMistura.get(1.0, END) != '\n'):
+                self.btnTratarEspectros.configure(state='enabled')
+                self.btnTratarEspectros.focus_force()
+            else:
+                self.btnTratarEspectros.configure(state='disabled')
+                self.btnSaveMS.configure(state='disabled')
+                self.btnSimular.configure(state='disabled')
+
+        else:
+            if (self.espectroPeridrogenado.get(1.0, END) != '\n') & (self.espectroMistura.get(1.0, END) != '\n'):
+                self.btnTratarEspectros.configure(state='enabled')
+                self.btnTratarEspectros.focus_force()
+            else:
+                self.btnTratarEspectros.configure(state='disabled')
+                self.btnSaveMS.configure(state='disabled')
+                self.btnSimular.configure(state='disabled')
+
+
+    def trataEspectros(self):
+
+
+        self.btnSaveMS.configure(state='enabled')
+        self.btnSimular.configure(state='enabled')
+        self.btnSimular.focus_force()
+
+    def salvarMS(self):
+        pass
+
+    def simularEspectros(self):
+        pass
 
 
 

@@ -17,8 +17,9 @@ class FrameIniciaMolecula(ttk.Frame):
         
         self.controller = controller
 
-        # Inicializa a variável check
+        # Inicializa a variável check e accepted Molec
         self.perdeutCheck = 0
+        self.accepetedMolec = False
 
         # Esta variável passada pela classe principal é a instância do logframe e permite
         # escrever no log.
@@ -149,14 +150,25 @@ class FrameIniciaMolecula(ttk.Frame):
 
     def AtualizaPerdeutCheck(self,  perdeutCheck):
         self.perdeutCheck = perdeutCheck
-    
-    
+        if self.accepetedMolec == True:
+            if self.perdeutCheck == 1:
+                self.controller.frames[frfiles.FrameAbreArquivos].btnAbrePerdeuterado.configure(state='enabled')
+            elif self.perdeutCheck ==0:
+                self.controller.frames[frfiles.FrameAbreArquivos].btnAbrePerdeuterado.configure(state='disabled')
+                self.controller.frames[frfiles.FrameAbreArquivos].espectroPerdeuterado.configure(state='normal')
+                self.controller.frames[frfiles.FrameAbreArquivos].espectroPerdeuterado.delete(1.0, END)
+                self.controller.frames[frfiles.FrameAbreArquivos].espectroPerdeuterado.configure(state='disabled')
+            else:
+                raise ValueError('Problemas com o checkbutton que controla o uso do espectro perdeuterado.')
+        self.controller.frames[frfiles.FrameAbreArquivos].checkTratarEspectros()
     
     def AceitaMolecula(self, *args):
         """Função ligada ao botão Aceitar da descrição da molécula. Deve dar início ao cálculo da matriz de
             contribuições de 13C e liberar o acesso ao Frame de abertura de arquivos de massas. Se for pressionado
             dando origem a um sistema supra-deteerminado retorna uma caixa de erro.
         """
+
+        self.accepetedMolec = True
 
         while True:
 

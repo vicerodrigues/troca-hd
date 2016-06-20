@@ -40,11 +40,14 @@ class TrocaMain(Tk):
         
         self.protocol('WM_DELETE_WINDOW', self.on_closing)
 
-    def on_closing(self):
+        self.bind('<Control-q>', self.on_closing)
+
+    def on_closing(self, *args):
         # Criar aqui o docstring
-        if messagebox.askokcancel('Fechar', 'Gostaria de fechar o programa?'):
-            self.destroy()
+        #if messagebox.askokcancel('Fechar', 'Gostaria de fechar o programa?'):
+        #    self.destroy()
         # Adicionar nesta função o lembrete das últimas opções utilizadas na corrida
+        self.destroy()
 
 if __name__ == '__main__':
     myTroca = TrocaMain()

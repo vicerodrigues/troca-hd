@@ -37,7 +37,14 @@ class MyMenu:
         self.perdeutCheck.set(0)
         self.menu_options.add_checkbutton(label='Usar perdeuterado',  variable=self.perdeutCheck,  onvalue=1,
                                           offvalue=0,  command=self.AtualizaPerdeutCheck, underline=5)
+        #self.menu_options.add_separator()
+
+        self.lembrarCheck = IntVar()
+        self.lembrarCheck.set(1)
+        self.menu_options.add_checkbutton(label='Lembrar opções',  variable=self.lembrarCheck,  onvalue=1,
+                                          offvalue=0, underline=1)#  command=self.AtualizaPerdeutCheck, underline=1)
         self.menu_options.add_separator()
+
         self.menu_log = Menu(self.menu_options)
         self.menu_options.add_cascade(menu=self.menu_log, label='Nível de Log:', underline=9)
         self.logRadiobutton = IntVar()

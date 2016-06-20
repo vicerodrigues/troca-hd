@@ -14,9 +14,14 @@ class IniciaArquivo:
         self.file_opt = options = {}
         options['defaultextension'] = '.xlsx'
         options['filetypes'] = [('Excel 2007-2013', '.xlsx'), ('all files', '.*')]
-        options['initialdir'] = os.path.expanduser('~/Downloads/troca-hd/examples')
+        options['initialdir'] = os.path.expanduser('~/git/troca-hd/examples')
         options['title'] = 'Abrir espectro composto ' + self.tipo
-        options['initialfile'] = 'PH.xlsx'
+        if self.tipo == 'peridrogenado':
+            options['initialfile'] = 'PH.xlsx'
+        elif self.tipo == 'perdeuterado':
+            options['initialfile'] = 'PD.xlsx'
+        else:
+            options['initialfile'] = 'PM.xlsx'
 
         # Abre arquivo e passa para self.filename
         self.filename = filedialog.askopenfilename(**self.file_opt)

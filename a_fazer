@@ -10,13 +10,14 @@ Para o perdeuterado ainda haverá uma nova herdeira para implementar a desativa�
 
 -Utilizar n+1 threads para calcular os espectros das diferentes espécies deuteradas.
 
--Implementar a janela result viewer como uma thread para manter o acesso a janela principal. Ela deve ser fechada junto com 
-a janela principal e ser criada com o clique do botão
+-Implementar a janela result viewer como uma thread para manter o acesso a janela principal. Ela deve ser fechada junto com a janela principal e ser criada com o clique do botão.
 
 
 
 Na fila imediata:
-    -Criar o frame para abrir os arquivos dos espectros frfiles
-    -Criar leitor de planilha excel e texto (future) dos arquivos
     -Criar as funções e interações dos menus da janela principal com os frames
     -Desabilitar o acesso a frmolec depois de clicar em Aceitar, a não ser que o usuário faça um reset :)
+    -Uso tardio do menu opções --> usar perdeuterado deve atualizar os frames
+    -Criar o frame com a entrada do método de minimos quadrados (scipy.nnls) ou criar um método que após o carregamento de todos os espectros esperados ele automaticamente abra a janela de resultados.
+    -Transferir as rotinas de habilitação/desabilitação do espectro perdeuterado para frfiles
+    -Definir rotinas para salvar últimas opções em arquivo (entrada em menu OK)
