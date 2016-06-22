@@ -3,7 +3,7 @@ from tkinter import ttk
 from tkinter import filedialog
 import os
 import frlog,frmenu,frmolec
-import importarquivo
+import importarquivo,fatoreshd,mscalc,arrays,simulaespectro
 
 class FrameAbreArquivos(ttk.Frame):
     """Esta classe cria o frame onde é são abertos os arquivos contendo os espectros de massas dos compostos
@@ -15,6 +15,8 @@ class FrameAbreArquivos(ttk.Frame):
         ttk.Frame.__init__(self, parent)
 
         self.controller = controller
+
+        self.perdeutCheck = 0
 
         # Esta variável passada pela classe principal é a instância do logframe e permite
         # escrever no log.
@@ -103,10 +105,10 @@ class FrameAbreArquivos(ttk.Frame):
         self.myPadX = 35
         self.myPadY = 5
 
-        self.btnTratarEspectros = ttk.Button(self.abreArquivos, text='Corrigir espectros', command=lambda: \
+        self.btnCalcEspectros = ttk.Button(self.abreArquivos, text='Calcular espectros', command=lambda: \
             self.trataEspectros(), state='disabled')
-        self.btnTratarEspectros.bind('<Return>', lambda x: self.trataEspectros())
-        self.btnTratarEspectros.grid(row=3, column=0, padx=(self.myPadX,self.myPadX), pady=(self.myPadY,self.myPadY-5)\
+        self.btnCalcEspectros.bind('<Return>', lambda x: self.trataEspectros())
+        self.btnCalcEspectros.grid(row=3, column=0, padx=(self.myPadX,self.myPadX), pady=(self.myPadY,self.myPadY-5)\
             , sticky='EW')
 
         self.btnSaveMS = ttk.Button(self.abreArquivos, text='Salvar MS', command=lambda: self.salvarMS(),\
@@ -121,12 +123,26 @@ class FrameAbreArquivos(ttk.Frame):
         self.btnSimular.grid(row=3, column=2, padx=(self.myPadX,self.myPadX), pady=(self.myPadY,self.myPadY-5)\
             , sticky='EW')
 
+    def AtualizaPerdeutCheck(self):
+        self.perdeutCheck = self.controller.frames[frmenu.MyMenu].perdeutCheck.get()
+        if self.controller.frames[frmolec.FrameIniciaMolecula].acceptedMolec == True:
+            if self.perdeutCheck == 1:
+                self.btnAbrePerdeuterado.configure(state='enabled')
+            elif self.perdeutCheck ==0:
+                self.btnAbrePerdeuterado.configure(state='disabled')
+                self.espectroPerdeuterado.configure(state='normal')
+                self.espectroPerdeuterado.delete(1.0, END)
+                self.espectroPerdeuterado.configure(state='disabled')
+            else:
+                raise ValueError('Problemas com o checkbutton que controla o uso do espectro perdeuterado.')
+        self.checkTratarEspectros()
+    
     def abreEspectro(self, tipo):
 
         self.tipo = tipo
         if self.tipo == 'peridrogenado':
-            self.peridrogenado = importarquivo.IniciaArquivo(tipo).AbreArquivo()
-            if self.peridrogenado.shape[0] == self.controller.frames[frmolec.FrameIniciaMolecula].nPoints.get():
+            self.peridrogenado = importarquivo.IniciaArquivo(tipo, self.controller).AbreArquivo()
+            if len(self.peridrogenado) == self.controller.frames[frmolec.FrameIniciaMolecula].nPoints.get():
                 self.populaTextbox(self.tipo)
                 if self.controller.frames[frmenu.MyMenu].perdeutCheck.get() == 1:
                     self.btnAbrePerdeuterado.focus_force()
@@ -136,16 +152,16 @@ class FrameAbreArquivos(ttk.Frame):
                 self.controller.frames[frlog.FrameLog].WriteLog('error',\
                      'O tamanho do espectro não condiz com o esperado! Verifique a faixa do espectro e o arquivo.')
         elif self.tipo == 'perdeuterado':
-            self.perdeuterado = importarquivo.IniciaArquivo(tipo).AbreArquivo()
-            if self.perdeuterado.shape[0] == self.controller.frames[frmolec.FrameIniciaMolecula].nPoints.get():
+            self.perdeuterado = importarquivo.IniciaArquivo(tipo, self.controller).AbreArquivo()
+            if len(self.perdeuterado) == self.controller.frames[frmolec.FrameIniciaMolecula].nPoints.get():
                 self.populaTextbox(self.tipo)
                 self.btnAbreMistura.focus_force()
             else:
                 self.controller.frames[frlog.FrameLog].WriteLog('error',\
                      'O tamanho do espectro não condiz com o esperado! Verifique a faixa do espectro e o arquivo.')
         elif self.tipo == 'mistura':
-            self.mistura = importarquivo.IniciaArquivo(tipo).AbreArquivo()
-            if self.mistura.shape[0] == self.controller.frames[frmolec.FrameIniciaMolecula].nPoints.get():
+            self.mistura = importarquivo.IniciaArquivo(tipo, self.controller).AbreArquivo()
+            if len(self.mistura) == self.controller.frames[frmolec.FrameIniciaMolecula].nPoints.get():
                 self.populaTextbox(self.tipo)
             else:
                 self.controller.frames[frlog.FrameLog].WriteLog('error',\
@@ -160,50 +176,51 @@ class FrameAbreArquivos(ttk.Frame):
 
         if self.tipo == 'peridrogenado':
             self.espectroPeridrogenado.configure(state='normal')
-            self.espectroPeridrogenado.insert('end', '\n'.join(str(x) for x in self.peridrogenado))
+            self.espectroPeridrogenado.insert('end', '\n'.join('%.0f'%x for x in self.peridrogenado))
             self.espectroPeridrogenado.configure(state='disabled')
         elif self.tipo == 'perdeuterado':
             self.espectroPerdeuterado.configure(state='normal')
-            self.espectroPerdeuterado.insert('end', '\n'.join(str(x) for x in self.perdeuterado))
+            self.espectroPerdeuterado.insert('end', '\n'.join('%.0f'%x for x in self.perdeuterado))
             self.espectroPerdeuterado.configure(state='disabled')
         elif self.tipo == 'mistura':
             self.espectroMistura.configure(state='normal')
-            self.espectroMistura.insert('end', '\n'.join(str(x) for x in self.mistura))
+            self.espectroMistura.insert('end', '\n'.join('%.0f'%x for x in self.mistura))
             self.espectroMistura.configure(state='disabled')
 
     def checkTratarEspectros(self):
         if self.controller.frames[frmenu.MyMenu].perdeutCheck.get() == 1:
             if (self.espectroPeridrogenado.get(1.0, END) != '\n') & (self.espectroPerdeuterado.get(1.0, END)\
              != '\n') & (self.espectroMistura.get(1.0, END) != '\n'):
-                self.btnTratarEspectros.configure(state='enabled')
-                self.btnTratarEspectros.focus_force()
+                self.btnCalcEspectros.configure(state='enabled')
+                self.btnCalcEspectros.focus_force()
             else:
-                self.btnTratarEspectros.configure(state='disabled')
+                self.btnCalcEspectros.configure(state='disabled')
                 self.btnSaveMS.configure(state='disabled')
                 self.btnSimular.configure(state='disabled')
 
         else:
             if (self.espectroPeridrogenado.get(1.0, END) != '\n') & (self.espectroMistura.get(1.0, END) != '\n'):
-                self.btnTratarEspectros.configure(state='enabled')
-                self.btnTratarEspectros.focus_force()
+                self.btnCalcEspectros.configure(state='enabled')
+                self.btnCalcEspectros.focus_force()
             else:
-                self.btnTratarEspectros.configure(state='disabled')
+                self.btnCalcEspectros.configure(state='disabled')
                 self.btnSaveMS.configure(state='disabled')
                 self.btnSimular.configure(state='disabled')
 
 
     def trataEspectros(self):
 
-
+        self.fatoreshd = fatoreshd.CalculaFatoresHD(self.controller).fatoresHD()
+        self.massSpectra = mscalc.DeuteratedSpectra(self.controller, self.peridrogenado, self.fatoreshd).CalcSpec()
         self.btnSaveMS.configure(state='enabled')
         self.btnSimular.configure(state='enabled')
         self.btnSimular.focus_force()
 
     def salvarMS(self):
-        pass
+        importarquivo.IniciaArquivo('MSsave', self.controller).salvarArquivo(self.massSpectra)
 
     def simularEspectros(self):
-        pass
+        simulaespectro.SimularEspectro(self.controller, self.mistura, self.massSpectra)
 
 
 

@@ -1,5 +1,5 @@
 from tkinter import *
-import frmolec
+import frfiles
 
 class MyMenu:
     """Esta classe cria um menu para a janela principal onde são passadas opções e comandos ao programa: ele poderá
@@ -45,6 +45,15 @@ class MyMenu:
                                           offvalue=0, underline=1)#  command=self.AtualizaPerdeutCheck, underline=1)
         self.menu_options.add_separator()
 
+        self.menu_method = Menu(self.menu_options)
+        self.menu_options.add_cascade(menu=self.menu_method, label='Método de cálculo:', underline=0)
+        self.methodRadiobutton = IntVar()
+        self.methodRadiobutton.set(2)
+        self.menu_method.add_radiobutton(label='Least-squares', variable=self.methodRadiobutton, value=1, underline=0)
+        self.menu_method.add_radiobutton(label='Non-negative least-squares', variable=self.methodRadiobutton, value=2, underline=0)
+
+        self.menu_options.add_separator()
+
         self.menu_log = Menu(self.menu_options)
         self.menu_options.add_cascade(menu=self.menu_log, label='Nível de Log:', underline=9)
         self.logRadiobutton = IntVar()
@@ -57,6 +66,8 @@ class MyMenu:
 
         self.menu_help.add_command(label='Sobre', underline=0) # implementar o command: , command)
 
+        #Substituir essa função por um trace na variável
+
     def AtualizaPerdeutCheck(self):
 
-        self.parent.frames[frmolec.FrameIniciaMolecula].AtualizaPerdeutCheck(self.perdeutCheck.get())
+        self.parent.frames[frfiles.FrameAbreArquivos].AtualizaPerdeutCheck()

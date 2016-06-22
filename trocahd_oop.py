@@ -4,6 +4,7 @@ from tkinter import *
 from tkinter import ttk
 import frmolec,frlog,frfiles,frmenu
 import tkinter.messagebox as messagebox
+import os
 
 class TrocaMain(Tk):
     """Classe principal do programa de cálculo para troca H-D.
@@ -13,6 +14,8 @@ class TrocaMain(Tk):
         
     def __init__(self, *args, **kwargs):
         Tk.__init__(self, *args, **kwargs)
+
+        self.child_window = None
         
         # Inicia frame mestre em self
         self.mainFrame = ttk.Frame(self, relief='ridge', borderwidth=2)  # Retirada a opção de relief:
@@ -50,9 +53,9 @@ class TrocaMain(Tk):
         self.destroy()
 
 if __name__ == '__main__':
-    myTroca = TrocaMain()
+    myTroca = TrocaMain(className='Trocahd')
     myTroca.title('Troca H-D Calculator')
-    img = PhotoImage(file='/home/vicerodrigues/Calculator.png')
+    img = PhotoImage(file=os.path.expanduser('~/Calculator.png'))#file='/home/vicerodrigues/Calculator.png')
     myTroca.tk.call('wm', 'iconphoto', myTroca._w, img)
     myTroca.geometry('+75+50')
     myTroca.mainloop()

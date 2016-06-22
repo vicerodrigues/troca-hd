@@ -1,20 +1,24 @@
+import frlog
+
 class IniciaMolecula:
     """Classe para calcular os valores das massas moleculares do compostos peridrogenado
         e perdeuterado, além do número de massas a serem considerados nos espectros.
         Também possui funções que tratam as entradas do software em frmolec.
     """
 
-    def __init__(self, nCarbon, nHydrogen, nMin, nMax, frame1, mySpecWarn, mySupraWarn, myMetilaWarn, myFaixaWarn):
+    def __init__(self, controller, nCarbon, nHydrogen, nMin, nMax, mySpecWarn, mySupraWarn, myMetilaWarn, \
+                 myFaixaWarn, myNMinWarn):
 
+        self.controller = controller
         self.nMin = nMin
         self.nMax = nMax
         self.nCarbon = nCarbon
         self.nHydrogen = nHydrogen
-        self.frame1 = frame1
         self.mySpecWarn = mySpecWarn
         self.mySupraWarn = mySupraWarn
         self.myMetilaWarn = myMetilaWarn
         self.myFaixaWarn = myFaixaWarn
+        self.myNMinWarn = myNMinWarn
 
         # retornando os valores solicitados a classe.
         self.MMH = 12 * self.nCarbon + self.nHydrogen
@@ -32,23 +36,27 @@ class IniciaMolecula:
             self.nMin = self.nMax - 1
             if not self.mySpecWarn:
                 self.mySpecWarn = True
-                self.frame1.WriteLog('error', 'Cuidado! A massa mínima do espectro não pode ser maior que a máxima.')
-                self.frame1.WriteLog('warn', 'Ajustando automaticamente o valor')
+                self.controller.frames[frlog.FrameLog].WriteLog('error', 'Cuidado! A massa mínima do espectro não pode ser maior que a máxima.')
+                self.controller.frames[frlog.FrameLog].WriteLog('warn', 'Ajustando automaticamente o valor')
         return self.nMin
 
     def issueWarnings(self):
 
         if self.nPoints <= self.nHydrogen+1 and not self.mySupraWarn:
             self.mySupraWarn = True
-            self.frame1.WriteLog('error', "Sistema supra-determinado: O número mínimo de pontos a serem "
+            self.controller.frames[frlog.FrameLog].WriteLog('error', "Sistema supra-determinado: O número mínimo de pontos a serem "
                                          "considerados deve ser maior que o número de H's +1")
         if self.nMin <= max(self.MMD-18, self.MMH-15) and not self.myMetilaWarn:
             self.myMetilaWarn = True
-            self.frame1.WriteLog('warn', 'No caso de moléculas terminadas em grupos CH3 (Ex.: propano ou metil '
+            self.controller.frames[frlog.FrameLog].WriteLog('warn', 'No caso de moléculas terminadas em grupos CH3 (Ex.: propano ou metil '
                                          'benzeno), pode estar havendo sobreposição do espectro considerado com o '
                                          'espectro de M-15.')
-            self.frame1.WriteLog('warn', 'Sugere-se aumentar o valor do limite mínimo do espectro de massas.')
+            self.controller.frames[frlog.FrameLog].WriteLog('warn', 'Sugere-se aumentar o valor do limite mínimo do espectro de massas.')
         if not ((self.nMin <= self.MMH-3) and (self.nMax >= self.MMD+2)) and not self.myFaixaWarn:
             self.myFaixaWarn = True
-            self.frame1.WriteLog('warn', 'De modo a melhorar a qualidade da simulação sugere-se utiliza faixa '
-                                         'do espectro de massas contendo (MMH-3) e (MMD+2).')
+            self.controller.frames[frlog.FrameLog].WriteLog('warn', 'De modo a melhorar a qualidade da simulação sugere-se utiliza faixa '
+                                         'do espectro de massas contendo pelo menos entre (MMH-3) e (MMD+2).')
+        if self.nMin < (self.MMH-self.nHydrogen) and not self.myNMinWarn:
+            self.myNMinWarn = True
+            self.controller.frames[frlog.FrameLog].WriteLog('warn', 'A faixa escolhida do espectro transcende a faixa de perda dos hidrogênios'
+                                         ' da molécula. Recomenda-se usar (MMH-nHydrogen) no mínimo.')

@@ -17,9 +17,8 @@ class FrameIniciaMolecula(ttk.Frame):
         
         self.controller = controller
 
-        # Inicializa a variável check e accepted Molec
-        self.perdeutCheck = 0
-        self.accpetedMolec = False
+        # Inicializa a variável acceptedMolec
+        self.acceptedMolec = False
 
         # Esta variável passada pela classe principal é a instância do logframe e permite
         # escrever no log.
@@ -88,6 +87,7 @@ class FrameIniciaMolecula(ttk.Frame):
         self.mySupraWarn = False
         self.myMetilaWarn = False
         self.myFaixaWarn = False
+        self.myNMinWarn = False
 
         # Atualiza os valores das massas moleculare e número de pontos
         self.AtualizaValores()
@@ -131,9 +131,9 @@ class FrameIniciaMolecula(ttk.Frame):
 
         # INFO: Adicionar aqui algum mecanismo para que escreva o log só na primeira mudança!
 
-        myMolec = molec.IniciaMolecula(self.myCarbonNumber.get(), self.myHydNumber.get(), self.mySpecMin.get(),
-                                       self.mySpecMax.get(), self.controller.frames[frlog.FrameLog], self.mySpecWarn, self.mySupraWarn,
-                                       self.myMetilaWarn, self.myFaixaWarn)
+        myMolec = molec.IniciaMolecula(self.controller, self.myCarbonNumber.get(), self.myHydNumber.get(), self.mySpecMin.get(),
+                                       self.mySpecMax.get(), self.mySpecWarn, self.mySupraWarn, self.myMetilaWarn, self.myFaixaWarn,
+                                        self.myNMinWarn)
         self.myMMH.set(myMolec.MMH)
         self.myMMD.set(myMolec.MMD)
         self.nPoints.set(myMolec.nPoints)
@@ -144,31 +144,18 @@ class FrameIniciaMolecula(ttk.Frame):
         self.mySupraWarn = myMolec.mySupraWarn
         self.myMetilaWarn = myMolec.myMetilaWarn
         self.myFaixaWarn = myMolec.myFaixaWarn
+        self.myNMinWarn = myMolec.myNMinWarn
 
         # Exemplo de log:
         # self.frame1.WriteLog('info', 'I Rock too')
 
-    def AtualizaPerdeutCheck(self,  perdeutCheck):
-        self.perdeutCheck = perdeutCheck
-        if self.acceptedMolec == True:
-            if self.perdeutCheck == 1:
-                self.controller.frames[frfiles.FrameAbreArquivos].btnAbrePerdeuterado.configure(state='enabled')
-            elif self.perdeutCheck ==0:
-                self.controller.frames[frfiles.FrameAbreArquivos].btnAbrePerdeuterado.configure(state='disabled')
-                self.controller.frames[frfiles.FrameAbreArquivos].espectroPerdeuterado.configure(state='normal')
-                self.controller.frames[frfiles.FrameAbreArquivos].espectroPerdeuterado.delete(1.0, END)
-                self.controller.frames[frfiles.FrameAbreArquivos].espectroPerdeuterado.configure(state='disabled')
-            else:
-                raise ValueError('Problemas com o checkbutton que controla o uso do espectro perdeuterado.')
-        self.controller.frames[frfiles.FrameAbreArquivos].checkTratarEspectros()
-    
     def AceitaMolecula(self, *args):
         """Função ligada ao botão Aceitar da descrição da molécula. Deve dar início ao cálculo da matriz de
             contribuições de 13C e liberar o acesso ao Frame de abertura de arquivos de massas. Se for pressionado
             dando origem a um sistema supra-deteerminado retorna uma caixa de erro.
         """
 
-        self.accepetedMolec = True
+        self.acceptedMolec = True
 
         while True:
 
@@ -223,13 +210,7 @@ myCarbonNumber.get(), self.myHydNumber.get(), self.mySpecMin.get(), self.mySpecM
 
             # colocar aqui um if para somente liberar este botão caso esteja marcada a opção de utilizar o espectro
             # perdeuterado.
-            if self.perdeutCheck == 1:
-                self.controller.frames[frfiles.FrameAbreArquivos].btnAbrePerdeuterado.configure(state='enabled')
-            elif self.perdeutCheck ==0:
-                self.controller.frames[frfiles.FrameAbreArquivos].btnAbrePerdeuterado.configure(state='disabled')
-            else:
-                raise ValueError('Problemas com o checkbutton que controla o uso do espectro perdeuterado.')
-
+            self.controller.frames[frfiles.FrameAbreArquivos].AtualizaPerdeutCheck()
             self.controller.frames[frfiles.FrameAbreArquivos].btnAbrePeridrogenado.focus_force()
 
             break

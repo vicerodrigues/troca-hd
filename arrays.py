@@ -35,20 +35,23 @@ class IO_Array:
                 for j in range(self.ncol):
                     self.list.append(self.sheet.cell(row=i+1, column=j+1).value)
                 self.mylist.append(self.list)        
-            self.myarray = np.array(self.mylist)
+            #self.myarray = np.array(self.mylist)
         else:
             try:
-                self.myarray = np.loadtxt(self.myfile)
+                self.mylist=[]
+                f = open(self.myfile)
+                for line in f:
+                    self.mylist.append(line)
             except:
                 print('Tipo de arquivo não reconhecido!')
                 sys.exit()
-        return self.myarray
+        return self.mylist
 
     def export_array(self, mylist):
-        self.mylist = mylist
+        self.mylist = np.array(mylist)
         self.import_file('export')
         self.nrow, self.ncol = self.mylist.shape
         for i in range(self.nrow):
             for j in range(self.ncol):
-                self.sheet.cell(row=i+1, column=j+1).value = self.mylist[i, j]
+                self.sheet.cell(row=i+1, column=j+1).value = float(self.mylist[i, j])
         self.wb.save(self.myfile)
