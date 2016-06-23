@@ -15,7 +15,7 @@ class TrocaMain(Tk):
     def __init__(self, *args, **kwargs):
         Tk.__init__(self, *args, **kwargs)
 
-        self.child_window = None
+        self.results_window = None
         
         # Inicia frame mestre em self
         self.mainFrame = ttk.Frame(self, relief='ridge', borderwidth=2)  # Retirada a opção de relief:

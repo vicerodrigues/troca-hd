@@ -5,30 +5,8 @@
 
 -Uma idéia interessante é permitir, através de um menu, modificar o nível de LOG do sistema - Em andamento
 
--Implementar a janela result viewer como uma thread para manter o acesso a janela principal. Ela deve ser fechada junto com a janela principal e ser criada com o clique do botão.
-
-
 
 Na fila imediata:
     -Criar as funções e interações dos menus da janela principal com os frames
     -Desabilitar o acesso a frmolec depois de clicar em Aceitar, a não ser que o usuário faça um reset :)
-    -Criar o frame com a entrada do método de minimos quadrados (scipy.nnls) ou criar um método que após o carregamento de todos os espectros esperados ele automaticamente abra a janela de resultados.
     -Definir rotinas para salvar últimas opções em arquivo (entrada em menu OK)
-
-Testes de solução do sistema:
-
-		myY = np.array(self.controller.frames[frfiles.FrameAbreArquivos].mistura)
-		myX = np.array(self.massSpectra)
-		#print(myY.shape,myX.shape)
-		#print(myY,myX)
-		myA,resid = np.linalg.lstsq(myX,myY)[:2]
-		teste=myA/myA.sum(axis=0)
-		r2 = 1-resid/(myY.size*myY.var())
-		print(teste)
-		print('\n')
-		print(r2)
-		A = opt.nnls(myX,myY[:,0])
-		#print(A)
-
-
-

@@ -50,8 +50,14 @@ class IO_Array:
     def export_array(self, mylist):
         self.mylist = np.array(mylist)
         self.import_file('export')
-        self.nrow, self.ncol = self.mylist.shape
-        for i in range(self.nrow):
-            for j in range(self.ncol):
-                self.sheet.cell(row=i+1, column=j+1).value = float(self.mylist[i, j])
+        if len(self.mylist.shape) > 1:
+            self.nrow, self.ncol = self.mylist.shape
+            for i in range(self.nrow):
+                for j in range(self.ncol):
+                    self.sheet.cell(row=i+1, column=j+1).value = float(self.mylist[i, j])
+        else:
+            self.nrow = len(self.mylist)
+            for i in range(self.nrow):
+                self.sheet.cell(row=i+1, column=1).value = float(self.mylist[i])
+
         self.wb.save(self.myfile)

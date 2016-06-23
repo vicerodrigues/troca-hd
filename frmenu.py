@@ -36,8 +36,8 @@ class MyMenu:
         self.perdeutCheck = IntVar()
         self.perdeutCheck.set(0)
         self.menu_options.add_checkbutton(label='Usar perdeuterado',  variable=self.perdeutCheck,  onvalue=1,
-                                          offvalue=0,  command=self.AtualizaPerdeutCheck, underline=5)
-        #self.menu_options.add_separator()
+                                          offvalue=0, underline=5) # command=self.AtualizaPerdeutCheck, underline=5)
+        self.perdeutCheck.trace('w', self.AtualizaPerdeutCheck)
 
         self.lembrarCheck = IntVar()
         self.lembrarCheck.set(1)
@@ -51,6 +51,7 @@ class MyMenu:
         self.methodRadiobutton.set(2)
         self.menu_method.add_radiobutton(label='Least-squares', variable=self.methodRadiobutton, value=1, underline=0)
         self.menu_method.add_radiobutton(label='Non-negative least-squares', variable=self.methodRadiobutton, value=2, underline=0)
+        self.methodRadiobutton.trace('w', self.mudaMetodo)
 
         self.menu_options.add_separator()
 
@@ -68,6 +69,13 @@ class MyMenu:
 
         #Substituir essa função por um trace na variável
 
-    def AtualizaPerdeutCheck(self):
+    def AtualizaPerdeutCheck(self, *args):
 
+        if self.parent.results_window != None:
+            self.parent.results_window.destroy()
         self.parent.frames[frfiles.FrameAbreArquivos].AtualizaPerdeutCheck()
+
+    def mudaMetodo(self, *args):
+
+        if self.parent.results_window != None:
+            self.parent.frames[frfiles.FrameAbreArquivos].simularEspectros()

@@ -1,13 +1,14 @@
 from tkinter import filedialog
 import os
-import arrays,spectracorr
+import arrays,spectracorr,resultsaver
 
 class IniciaArquivo:
 
-    def __init__(self, tipo, controller):
+    def __init__(self, tipo, **kwargs):
 
         self.tipo = tipo
-        self.controller = controller
+        if len(kwargs) > 0:
+            self.controller = kwargs['controller']
 
     def AbreArquivo(self):
 
@@ -33,19 +34,29 @@ class IniciaArquivo:
 
         return self.corrArray
 
-    def salvarArquivo(self, fileSaveList):
+    def salvarArquivo(self, fileSaveList, *args):
 
-        self.massSpectra = fileSaveList
+        self.outputList = fileSaveList
+
+        self.args = args
 
         #  Opções da caixa de diálogo
         self.file_opt = options = {}
         options['defaultextension'] = '.xlsx'
         options['filetypes'] = [('Excel 2007-2013', '.xlsx')]
         options['initialdir'] = os.path.expanduser('~/git/troca-hd/examples')
-        options['title'] = 'Salvar espectros'
-        options['initialfile'] = 'MSspectra.xlsx'
+        if self.tipo == 'MSsave':
+            options['title'] = 'Salvar espectros'
+            options['initialfile'] = 'MSspectra.xlsx'
+        elif self.tipo == 'Resultsave':
+            options['title'] = 'Salvar resultados'
+            options['initialfile'] = 'Resultados.xlsx'
 
         # Abre arquivo e passa para self.filename
         self.filename = filedialog.asksaveasfilename(**self.file_opt)
 
-        arrays.IO_Array(self.filename).export_array(self.massSpectra)
+        if self.tipo == 'MSsave':
+            arrays.IO_Array(self.filename).export_array(self.outputList)
+        elif self.tipo == 'Resultsave':
+            resultsaver.OutputResults(self.filename).export_results(self.outputList, self.args)
+

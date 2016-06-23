@@ -141,7 +141,7 @@ class FrameAbreArquivos(ttk.Frame):
 
         self.tipo = tipo
         if self.tipo == 'peridrogenado':
-            self.peridrogenado = importarquivo.IniciaArquivo(tipo, self.controller).AbreArquivo()
+            self.peridrogenado = importarquivo.IniciaArquivo(tipo, controller=self.controller).AbreArquivo()
             if len(self.peridrogenado) == self.controller.frames[frmolec.FrameIniciaMolecula].nPoints.get():
                 self.populaTextbox(self.tipo)
                 if self.controller.frames[frmenu.MyMenu].perdeutCheck.get() == 1:
@@ -152,7 +152,7 @@ class FrameAbreArquivos(ttk.Frame):
                 self.controller.frames[frlog.FrameLog].WriteLog('error',\
                      'O tamanho do espectro não condiz com o esperado! Verifique a faixa do espectro e o arquivo.')
         elif self.tipo == 'perdeuterado':
-            self.perdeuterado = importarquivo.IniciaArquivo(tipo, self.controller).AbreArquivo()
+            self.perdeuterado = importarquivo.IniciaArquivo(tipo, controller=self.controller).AbreArquivo()
             if len(self.perdeuterado) == self.controller.frames[frmolec.FrameIniciaMolecula].nPoints.get():
                 self.populaTextbox(self.tipo)
                 self.btnAbreMistura.focus_force()
@@ -160,7 +160,7 @@ class FrameAbreArquivos(ttk.Frame):
                 self.controller.frames[frlog.FrameLog].WriteLog('error',\
                      'O tamanho do espectro não condiz com o esperado! Verifique a faixa do espectro e o arquivo.')
         elif self.tipo == 'mistura':
-            self.mistura = importarquivo.IniciaArquivo(tipo, self.controller).AbreArquivo()
+            self.mistura = importarquivo.IniciaArquivo(tipo, controller=self.controller).AbreArquivo()
             if len(self.mistura) == self.controller.frames[frmolec.FrameIniciaMolecula].nPoints.get():
                 self.populaTextbox(self.tipo)
             else:
@@ -217,7 +217,7 @@ class FrameAbreArquivos(ttk.Frame):
         self.btnSimular.focus_force()
 
     def salvarMS(self):
-        importarquivo.IniciaArquivo('MSsave', self.controller).salvarArquivo(self.massSpectra)
+        importarquivo.IniciaArquivo('MSsave').salvarArquivo(self.massSpectra)
 
     def simularEspectros(self):
         simulaespectro.SimularEspectro(self.controller, self.mistura, self.massSpectra)
