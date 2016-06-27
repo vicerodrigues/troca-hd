@@ -134,6 +134,8 @@ class FrameAbreArquivos(ttk.Frame):
                 self.espectroPerdeuterado.configure(state='normal')
                 self.espectroPerdeuterado.delete(1.0, END)
                 self.espectroPerdeuterado.configure(state='disabled')
+                if (self.espectroPeridrogenado.get(1.0, END) != '\n') & (self.espectroMistura.get(1.0, END) != '\n'):
+                    self.trataEspectros()
             else:
                 raise ValueError('Problemas com o checkbutton que controla o uso do espectro perdeuterado.')
         self.checkTratarEspectros()

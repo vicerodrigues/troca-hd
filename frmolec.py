@@ -13,19 +13,18 @@ class FrameIniciaMolecula(ttk.Frame):
 
     def __init__(self, parent, controller):
 
+        # Inicialização de ttk.Frame de onde a classe herda
         ttk.Frame.__init__(self, parent)
-        
+
+        # Passando o controller como uma variável local para uso        
         self.controller = controller
 
-        # Inicializa a variável acceptedMolec
+        # Inicializa a variável acceptedMolec utilizada na lógica em frfiles para saber se a molécula já foi aceita
         self.acceptedMolec = False
 
         # Esta variável passada pela classe principal é a instância do logframe e permite
         # escrever no log.
         self.controller.frames[frlog.FrameLog].WriteLog('info', 'Iniciando Frames de descrição da molécula e espectro.')
-
-        # Esta variável passada pela classe principal é a instância de frame de abrir arquivos e permite
-        # que frmolec interaja com os botões habilitando-os
 
         # Inicia o frame da classe
         self.iniciaMolec = ttk.Frame(self, padding=(5, 5, 5, 6), relief=RIDGE, borderwidth=2)
@@ -82,14 +81,14 @@ class FrameIniciaMolecula(ttk.Frame):
         self.myMMD = IntVar()
         self.nPoints = IntVar()
 
-        # Variáveis booleanas para lançamentos de erros repetitivos
+        # Variáveis booleanas para evitar lançamentos de erros repetitivos (despolui o log)
         self.mySpecWarn = False
         self.mySupraWarn = False
         self.myMetilaWarn = False
         self.myFaixaWarn = False
         self.myNMinWarn = False
 
-        # Atualiza os valores das massas moleculare e número de pontos
+        # Atualiza os valores das massas moleculare, número de pontos e faz algumas verificações nas faixas utilizadas
         self.AtualizaValores()
 
         # Widgets das massas e número de pontos:
@@ -146,32 +145,27 @@ class FrameIniciaMolecula(ttk.Frame):
         self.myFaixaWarn = myMolec.myFaixaWarn
         self.myNMinWarn = myMolec.myNMinWarn
 
-        # Exemplo de log:
-        # self.frame1.WriteLog('info', 'I Rock too')
-
     def AceitaMolecula(self, *args):
         """Função ligada ao botão Aceitar da descrição da molécula. Deve dar início ao cálculo da matriz de
             contribuições de 13C e liberar o acesso ao Frame de abertura de arquivos de massas. Se for pressionado
             dando origem a um sistema supra-deteerminado retorna uma caixa de erro.
         """
-
-        self.acceptedMolec = True
-
-        while True:
-
-            # Lança erro para um sistema supra-determinado e não executa o resto da função.
-            if self.nPoints.get() <= self.myHydNumber.get()+1:
-                messagebox.showinfo(title='Erro', message='Sistema supra-determinado', detail="O número mínimo de\
-                    pontos a serem considerados deve ser maior que o número de Hs +1", icon='error')
-                self.controller.frames[frlog.FrameLog].text_handler.setFormatter(logging.Formatter('%(message)s'))
-                self.controller.frames[frlog.FrameLog].WriteLog('info', ' '*11+'Inicializando molécula:'+' '*11+'\n'*2)
-                self.controller.frames[frlog.FrameLog].text_handler.setFormatter(logging.Formatter(self.controller.\
-                    frames[frlog.FrameLog].format_))
-                self.controller.frames[frlog.FrameLog].WriteLog('critical', "Sistema supra-determinado: O número mínimo de pontos a serem "
-                                                 "considerados deve ser maior que o número de H's +1")
-                self.controller.frames[frlog.FrameLog].WriteLog('critical', 'Não será dado prosseguimento a execução do programa!')
-                self.controller.frames[frlog.FrameLog].WriteLog('info', 'Corrija o número de pontos e clique em aceitar novamente.')
-                break
+        
+        # Lança erro para um sistema supra-determinado e não executa o resto da função (else).
+        if self.nPoints.get() <= self.myHydNumber.get()+1:
+            messagebox.showinfo(title='Erro', message='Sistema supra-determinado', detail="O número mínimo de"\
+                "pontos a serem considerados deve ser maior que o número de Hs +1", icon='error')
+            self.controller.frames[frlog.FrameLog].text_handler.setFormatter(logging.Formatter('%(message)s'))
+            self.controller.frames[frlog.FrameLog].WriteLog('info', ' '*11+'Inicializando molécula:'+' '*11+'\n'*2)
+            self.controller.frames[frlog.FrameLog].text_handler.setFormatter(logging.Formatter(self.controller.\
+                frames[frlog.FrameLog].format_))
+            self.controller.frames[frlog.FrameLog].WriteLog('critical', "Sistema supra-determinado: O número mínimo de pontos a serem "\
+                "considerados deve ser maior que o número de H's +1")
+            self.controller.frames[frlog.FrameLog].WriteLog('critical', 'Não será dado prosseguimento a execução do programa!')
+            self.controller.frames[frlog.FrameLog].WriteLog('info', 'Corrija o número de pontos e clique em aceitar novamente.')
+        else:
+            # Booleana descrevendo que a molécula foi aceita utilizada na lógica em frfiles para saber se a molécula já foi aceita
+            self.acceptedMolec = True
 
             # Descreve a molécula e o espectro no log.
             self.controller.frames[frlog.FrameLog].text_handler.setFormatter(logging.Formatter('%(message)s'))
@@ -208,9 +202,8 @@ myCarbonNumber.get(), self.myHydNumber.get(), self.mySpecMin.get(), self.mySpecM
             self.specMin.configure(state='disabled')
             self.specMax.configure(state='disabled')
 
-            # colocar aqui um if para somente liberar este botão caso esteja marcada a opção de utilizar o espectro
-            # perdeuterado.
+            # colocar aqui uma chamada a função para somente liberar o botão do perdeuterado caso esteja marcada a 
+            # opção de utilizá-lo esteja marcada no menu
             self.controller.frames[frfiles.FrameAbreArquivos].AtualizaPerdeutCheck()
+            # Transfere o foco para o botão de abertura do arquivo peridrogenado
             self.controller.frames[frfiles.FrameAbreArquivos].btnAbrePeridrogenado.focus_force()
-
-            break

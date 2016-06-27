@@ -79,7 +79,7 @@ class FrameLog(ttk.Frame, logging.Handler):
             # corre o Handler __init__
             logging.Handler.__init__(self)
 
-            # guarda a referência ao tkinter.Text onde será feito o log.
+            # guarda a referência ao Widget Text onde será feito o log.
             self.text = text
 
         def emit(self, record):

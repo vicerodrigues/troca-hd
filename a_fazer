@@ -1,12 +1,7 @@
-- Implementar reset de todas as mensagens de log
-
 -IMPLEMENTAR UM CAIXA DE TEXTO COM SCROLL PARA MOSTRAR LOG DO PROGRAMA: o mesmo deve poder ser salvo em um arquivo
  log
 
--Uma idéia interessante é permitir, através de um menu, modificar o nível de LOG do sistema - Em andamento
-
-
 Na fila imediata:
-    -Criar as funções e interações dos menus da janela principal com os frames
-    -Desabilitar o acesso a frmolec depois de clicar em Aceitar, a não ser que o usuário faça um reset :)
-    -Definir rotinas para salvar últimas opções em arquivo (entrada em menu OK)
+      -Verificar quais objetos e variáveis realamente precisam de cópia local (self.fulano = fulano)
+      -Acondicionar os arquivos em pastas
+      -Criar o instalador do programa que irá passar a pasta de instalação para os diferentes arquivos
