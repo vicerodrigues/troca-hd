@@ -16,7 +16,7 @@ class IniciaArquivo:
         self.file_opt = options = {}
         options['defaultextension'] = '.xlsx'
         options['filetypes'] = [('Excel 2007-2013', '.xlsx'), ('all files', '.*')]
-        options['initialdir'] = os.path.expanduser('~/git/troca-hd/examples')
+        options['initialdir'] = os.path.expanduser(self.controller.openFileDir)
         options['title'] = 'Abrir espectro composto ' + self.tipo
         if self.tipo == 'peridrogenado':
             options['initialfile'] = 'PH.xlsx'
@@ -28,11 +28,12 @@ class IniciaArquivo:
         # Abre arquivo e passa para self.filename
         self.filename = filedialog.askopenfilename(**self.file_opt)
 
-        self.myArray =  arrays.IO_Array(self.filename).create_array()[1:]
-
-        self.corrArray = spectracorr.SpectraCorr(self.controller, self.myArray).correctSpec()
-
-        return self.corrArray
+        self.controller.openFileDir = os.path.dirname(self.filename)
+        
+        if os.path.isfile(str(self.filename)):
+            self.myArray =  arrays.IO_Array(self.filename).create_array(self.controller)[1:]
+            self.corrArray = spectracorr.SpectraCorr(self.controller, self.myArray).correctSpec()
+            return self.corrArray
 
     def salvarArquivo(self, fileSaveList, *args):
 
@@ -44,7 +45,7 @@ class IniciaArquivo:
         self.file_opt = options = {}
         options['defaultextension'] = '.xlsx'
         options['filetypes'] = [('Excel 2007-2013', '.xlsx')]
-        options['initialdir'] = os.path.expanduser('~/git/troca-hd/examples')
+        options['initialdir'] = os.path.expanduser(self.controller.saveFileDir)
         if self.tipo == 'MSsave':
             options['title'] = 'Salvar espectros'
             options['initialfile'] = 'MSspectra.xlsx'
@@ -55,8 +56,11 @@ class IniciaArquivo:
         # Abre arquivo e passa para self.filename
         self.filename = filedialog.asksaveasfilename(**self.file_opt)
 
-        if self.tipo == 'MSsave':
-            arrays.IO_Array(self.filename).export_array(self.outputList)
-        elif self.tipo == 'Resultsave':
-            resultsaver.OutputResults(self.filename).export_results(self.outputList, self.args)
+        self.controller.saveFileDir = os.path.dirname(self.filename)
+
+        if self.filename != '':
+            if self.tipo == 'MSsave':
+                arrays.IO_Array(self.filename).export_array(self.outputList)
+            elif self.tipo == 'Resultsave':
+                resultsaver.OutputResults(self.filename).export_results(self.outputList, self.args)
 

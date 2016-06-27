@@ -1,5 +1,5 @@
 from tkinter import *
-import frfiles
+import frfiles,frlog,frmolec
 
 class MyMenu:
     """Esta classe cria um menu para a janela principal onde são passadas opções e comandos ao programa: ele poderá
@@ -27,28 +27,37 @@ class MyMenu:
         self.menubar.add_cascade(menu=self.menu_options, label='Opções', underline=0)
         self.menubar.add_cascade(menu=self.menu_help, label='Ajuda', underline=1)
 
-        self.menu_file.add_command(label='Reset', accelerator="Ctrl+R", underline=0) # implementar o command: , command)
-        self.menu_file.add_command(label='Full-Reset', accelerator="Shift+Ctrl+R", underline=1) # implementar o command: , command)
+        self.menu_file.add_command(label='Reset', accelerator="Ctrl+R", underline=0, command=self.resetSoft)
+        self.menu_file.add_command(label='Full-Reset', accelerator="Ctrl+Shift+R", underline=1, command=\
+                self.fullResetSoft)
         self.menu_file.add_separator()
         self.menu_file.add_command(label='Fechar', accelerator="Ctrl+Q", underline=0, command = lambda: self.parent.\
             on_closing()) # implementar o command: , command)
 
         self.perdeutCheck = IntVar()
-        self.perdeutCheck.set(0)
+        #self.perdeutCheck.set(0)
+        self.perdeutCheck.set(self.parent.myVars["perdeutCheck"])
         self.menu_options.add_checkbutton(label='Usar perdeuterado',  variable=self.perdeutCheck,  onvalue=1,
                                           offvalue=0, underline=5) # command=self.AtualizaPerdeutCheck, underline=5)
         self.perdeutCheck.trace('w', self.AtualizaPerdeutCheck)
 
         self.lembrarCheck = IntVar()
-        self.lembrarCheck.set(1)
+        #self.lembrarCheck.set(1)
+        self.lembrarCheck.set(self.parent.myVars["lembrarCheck"])
         self.menu_options.add_checkbutton(label='Lembrar opções',  variable=self.lembrarCheck,  onvalue=1,
                                           offvalue=0, underline=1)#  command=self.AtualizaPerdeutCheck, underline=1)
+
+        self.menu_options.add_separator()
+        
+        self.menu_options.add_command(label='Resetar opções', underline=0, command=self.resetOptions)
+
         self.menu_options.add_separator()
 
         self.menu_method = Menu(self.menu_options)
         self.menu_options.add_cascade(menu=self.menu_method, label='Método de cálculo:', underline=0)
         self.methodRadiobutton = IntVar()
-        self.methodRadiobutton.set(2)
+        #self.methodRadiobutton.set(2)
+        self.methodRadiobutton.set(self.parent.myVars["methodRadiobutton"])
         self.menu_method.add_radiobutton(label='Least-squares', variable=self.methodRadiobutton, value=1, underline=0)
         self.menu_method.add_radiobutton(label='Non-negative least-squares', variable=self.methodRadiobutton, value=2, underline=0)
         self.methodRadiobutton.trace('w', self.mudaMetodo)
@@ -57,17 +66,18 @@ class MyMenu:
 
         self.menu_log = Menu(self.menu_options)
         self.menu_options.add_cascade(menu=self.menu_log, label='Nível de Log:', underline=9)
-        self.logRadiobutton = IntVar()
-        self.logRadiobutton.set(2)
-        self.menu_log.add_radiobutton(label='Debug', variable=self.logRadiobutton, value=1, underline=0)
-        self.menu_log.add_radiobutton(label='Info', variable=self.logRadiobutton, value=2, underline=0)
-        self.menu_log.add_radiobutton(label='Warn', variable=self.logRadiobutton, value=3, underline=0)
-        self.menu_log.add_radiobutton(label='Error', variable=self.logRadiobutton, value=4, underline=0)
-        self.menu_log.add_radiobutton(label='Critical', variable=self.logRadiobutton, value=5, underline=0)
+
+        self.logRadiobutton = StringVar()
+        #self.logRadiobutton.set('INFO')
+        self.logRadiobutton.set(self.parent.myVars["logRadiobutton"])
+        self.menu_log.add_radiobutton(label='Debug', variable=self.logRadiobutton, value='DEBUG', underline=0)
+        self.menu_log.add_radiobutton(label='Info', variable=self.logRadiobutton, value='INFO', underline=0)
+        self.menu_log.add_radiobutton(label='Warn', variable=self.logRadiobutton, value='WARN', underline=0)
+        self.menu_log.add_radiobutton(label='Error', variable=self.logRadiobutton, value='ERROR', underline=0)
+        self.menu_log.add_radiobutton(label='Critical', variable=self.logRadiobutton, value='CRITICAL', underline=0)
+        self.logRadiobutton.trace('w', self.changeLogLevel)
 
         self.menu_help.add_command(label='Sobre', underline=0) # implementar o command: , command)
-
-        #Substituir essa função por um trace na variável
 
     def AtualizaPerdeutCheck(self, *args):
 
@@ -79,3 +89,59 @@ class MyMenu:
 
         if self.parent.results_window != None:
             self.parent.frames[frfiles.FrameAbreArquivos].simularEspectros()
+
+    def changeLogLevel(self, *args):
+
+        self.parent.frames[frlog.FrameLog].logger.setLevel(self.logRadiobutton.get())
+
+    def resetSoft(self, *args):
+
+        if self.parent.results_window != None:
+            self.parent.results_window.destroy()
+
+            self.parent.frames[frfiles.FrameAbreArquivos].espectroMistura.configure(state='normal')
+            self.parent.frames[frfiles.FrameAbreArquivos].espectroMistura.delete(1.0, END)
+            self.parent.frames[frfiles.FrameAbreArquivos].espectroMistura.configure(state='disabled')
+            self.parent.frames[frfiles.FrameAbreArquivos].checkTratarEspectros()
+            self.parent.frames[frfiles.FrameAbreArquivos].btnAbreMistura.focus_force()
+
+    def fullResetSoft(self, *args):
+
+        self.resetSoft()
+
+        if self.perdeutCheck == 1:
+            self.parent.frames[frfiles.FrameAbreArquivos].espectroPerdeuterado.configure(state='normal')
+            self.parent.frames[frfiles.FrameAbreArquivos].espectroPerdeuterado.delete(1.0, END)
+            self.parent.frames[frfiles.FrameAbreArquivos].espectroPerdeuterado.configure(state='disabled')
+
+        self.parent.frames[frfiles.FrameAbreArquivos].espectroPeridrogenado.configure(state='normal')
+        self.parent.frames[frfiles.FrameAbreArquivos].espectroPeridrogenado.delete(1.0, END)
+        self.parent.frames[frfiles.FrameAbreArquivos].espectroPeridrogenado.configure(state='disabled')
+
+        # desabilitando os botões
+        self.parent.frames[frfiles.FrameAbreArquivos].btnAbrePeridrogenado.configure(state='disabled')
+        self.parent.frames[frfiles.FrameAbreArquivos].btnAbreMistura.configure(state='disabled')
+        self.parent.frames[frfiles.FrameAbreArquivos].btnAbrePerdeuterado.configure(state='disabled')
+
+        self.parent.frames[frmolec.FrameIniciaMolecula].carbonNumber.configure(state='normal')
+        self.parent.frames[frmolec.FrameIniciaMolecula].hydNumber.configure(state='normal')
+        self.parent.frames[frmolec.FrameIniciaMolecula].specMin.configure(state='normal')
+        self.parent.frames[frmolec.FrameIniciaMolecula].specMax.configure(state='normal')
+
+        self.parent.frames[frmolec.FrameIniciaMolecula].btnAceitar.focus_force()
+
+    def resetOptions(self, *args):
+
+        self.fullResetSoft()
+        
+        self.parent.frames[frmolec.FrameIniciaMolecula].myCarbonNumber.set(6)
+        self.parent.frames[frmolec.FrameIniciaMolecula].myHydNumber.set(6)
+        self.parent.frames[frmolec.FrameIniciaMolecula].mySpecMax.set(86)
+        self.parent.frames[frmolec.FrameIniciaMolecula].mySpecMin.set(73)
+        self.parent.openFileDir = '~/git/troca-hd/examples/'
+        self.parent.saveFileDir = '~/git/troca-hd/examples/'
+
+        self.perdeutCheck.set(0)
+        self.lembrarCheck.set(1)
+        #self.methodRadiobutton.set(2)
+        self.logRadiobutton.set('INFO')

@@ -59,4 +59,4 @@ class IniciaMolecula:
         if self.nMin < (self.MMH-self.nHydrogen) and not self.myNMinWarn:
             self.myNMinWarn = True
             self.controller.frames[frlog.FrameLog].WriteLog('warn', 'A faixa escolhida do espectro transcende a faixa de perda dos hidrogênios'
-                                         ' da molécula. Recomenda-se usar (MMH-nHydrogen) no mínimo.')
+                                         ' da molécula. Recomenda-se usar (MMH-nHydrogen) para o mínimo.')

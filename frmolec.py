@@ -41,9 +41,9 @@ class FrameIniciaMolecula(ttk.Frame):
 
         # Inicia variáveis das spinboxes contendo átomos de C e de H na molécula C6H6
         self.myCarbonNumber = IntVar()
-        self.myCarbonNumber.set(6)
+        self.myCarbonNumber.set(self.controller.myVars["nCarbon"])
         self.myHydNumber = IntVar()
-        self.myHydNumber.set(6)
+        self.myHydNumber.set(self.controller.myVars["nHydrogen"])
 
         # Popula o primeiro frame com os dados da molécula
         self.lbl1 = ttk.Label(self.molecFrame, text='Molécula: C', padding=(0, 0, 0, 15), font='TkCaptionFont')
@@ -59,9 +59,9 @@ class FrameIniciaMolecula(ttk.Frame):
 
         # Inicia as variáveis dos limites do espectro
         self.mySpecMin = IntVar()
-        self.mySpecMin.set(73)
+        self.mySpecMin.set(self.controller.myVars["specMin"])
         self.mySpecMax = IntVar()
-        self.mySpecMax.set(86)
+        self.mySpecMax.set(self.controller.myVars["specMax"])
 
         # Popula o segundo frame com os limites do espectro
         self.lbl3 = ttk.Label(self.specFrame, text='Limites do espectro:', font='TkCaptionFont')
@@ -161,8 +161,8 @@ class FrameIniciaMolecula(ttk.Frame):
 
             # Lança erro para um sistema supra-determinado e não executa o resto da função.
             if self.nPoints.get() <= self.myHydNumber.get()+1:
-                messagebox.showinfo(title='Erro', message='Sistema supra-determinado', detail="O número mínimo de \
-pontos a serem considerados deve ser maior que o número de H's +1", icon='error')
+                messagebox.showinfo(title='Erro', message='Sistema supra-determinado', detail="O número mínimo de\
+                    pontos a serem considerados deve ser maior que o número de Hs +1", icon='error')
                 self.controller.frames[frlog.FrameLog].text_handler.setFormatter(logging.Formatter('%(message)s'))
                 self.controller.frames[frlog.FrameLog].WriteLog('info', ' '*11+'Inicializando molécula:'+' '*11+'\n'*2)
                 self.controller.frames[frlog.FrameLog].text_handler.setFormatter(logging.Formatter(self.controller.\

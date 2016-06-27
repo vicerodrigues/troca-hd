@@ -4,7 +4,7 @@ from tkinter import *
 from tkinter import ttk
 import frmolec,frlog,frfiles,frmenu
 import tkinter.messagebox as messagebox
-import os
+import os,pickle
 
 class TrocaMain(Tk):
     """Classe principal do programa de cálculo para troca H-D.
@@ -16,7 +16,9 @@ class TrocaMain(Tk):
         Tk.__init__(self, *args, **kwargs)
 
         self.results_window = None
-        
+
+        self.on_load()
+
         # Inicia frame mestre em self
         self.mainFrame = ttk.Frame(self, relief='ridge', borderwidth=2)  # Retirada a opção de relief:
                                                                         # , relief=RAISED, borderwidth=2)
@@ -45,17 +47,50 @@ class TrocaMain(Tk):
 
         self.bind('<Control-q>', self.on_closing)
 
+        self.bind('<Control-r>', self.frames[frmenu.MyMenu].resetSoft)
+
+        self.bind('<Control-R>', self.frames[frmenu.MyMenu].fullResetSoft)
+
+    def on_load(self):
+
+        self.file = open(os.path.expanduser('~/git/troca-hd/data/store.pckl'), 'rb')
+        self.myVars = pickle.load(self.file)
+        self.file.close()
+        self.openFileDir = self.myVars["openFileDir"]
+        self.saveFileDir = self.myVars["saveFileDir"]
+        #print(self.myVars)
+
     def on_closing(self, *args):
+        
         # Criar aqui o docstring
         #if messagebox.askokcancel('Fechar', 'Gostaria de fechar o programa?'):
         #    self.destroy()
         # Adicionar nesta função o lembrete das últimas opções utilizadas na corrida
+
+        if self.frames[frmenu.MyMenu].lembrarCheck.get() == 1:
+            self.myVars = {}
+            self.myVars["nCarbon"] = self.frames[frmolec.FrameIniciaMolecula].myCarbonNumber.get()
+            self.myVars["nHydrogen"] = self.frames[frmolec.FrameIniciaMolecula].myHydNumber.get()
+            self.myVars["specMin"] = self.frames[frmolec.FrameIniciaMolecula].mySpecMin.get()
+            self.myVars["specMax"] = self.frames[frmolec.FrameIniciaMolecula].mySpecMax.get()
+            self.myVars["openFileDir"] = self.openFileDir
+            self.myVars["saveFileDir"] = self.saveFileDir
+
+            self.myVars["perdeutCheck"] = self.frames[frmenu.MyMenu].perdeutCheck.get()
+            self.myVars["lembrarCheck"] = self.frames[frmenu.MyMenu].lembrarCheck.get()
+            self.myVars["methodRadiobutton"] = self.frames[frmenu.MyMenu].methodRadiobutton.get()
+            self.myVars["logRadiobutton"] = self.frames[frmenu.MyMenu].logRadiobutton.get()
+
+            self.file = open(os.path.expanduser('~/git/troca-hd/data/store.pckl'), 'wb')
+            pickle.dump(self.myVars, self.file)
+            self.file.close()
+
         self.destroy()
 
 if __name__ == '__main__':
     myTroca = TrocaMain(className='Trocahd')
     myTroca.title('Troca H-D Calculator')
-    img = PhotoImage(file=os.path.expanduser('~/Calculator.png'))#file='/home/vicerodrigues/Calculator.png')
+    img = PhotoImage(file=os.path.expanduser('~/Calculator.png'))
     myTroca.tk.call('wm', 'iconphoto', myTroca._w, img)
     myTroca.geometry('+75+50')
     myTroca.mainloop()

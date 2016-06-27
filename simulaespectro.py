@@ -35,15 +35,17 @@ class SimularEspectro:
 		if self.controller.results_window:
 			self.controller.results_window.destroy()
 
-		self.counter = 1
-
 		self.controller.results_window = Toplevel(self.controller, class_='Trocahd')
 
 		self.controller.results_window.title("Resultados")
 		img = PhotoImage(file=os.path.expanduser('~/Calculator.png'))
 		self.controller.results_window.tk.call('wm', 'iconphoto', self.controller.results_window._w, img)
 		self.controller.results_window.geometry('+725+50')
-		self.controller.results_window.bind('<Control-q>', lambda x: self.controller.results_window.destroy())
+		self.controller.results_window.bind('<Control-q>', self.on_closing_results)
+		self.controller.results_window.bind('<Control-r>', self.controller.frames[frmenu.MyMenu].resetSoft)
+		self.controller.results_window.bind('<Control-R>', self.controller.frames[frmenu.MyMenu].fullResetSoft)
+
+		self.controller.results_window.protocol('WM_DELETE_WINDOW', self.on_closing_results)
 
 		self.outerFrame = ttk.Frame(self.controller.results_window, relief='ridge', borderwidth=2)
 		self.outerFrame.grid(row=0, column=0, sticky=(N, S, E, W), padx=1, pady=1)
@@ -104,16 +106,21 @@ class SimularEspectro:
 		self.btnGraph = ttk.Button(self.rightFrame, text='Gráfico', command=self.plotarGrafico())
 		self.btnGraph.grid(row=5, column=2, sticky='ew', padx=(10, 5), pady=(5, 0))
 		self.btnGraph.bind('<Return>', lambda x: self.plotarGrafico())
+		self.btnGraph.configure(state='disabled')
 
 		self.btnSalvar.focus_force()
 
 	def salvaResultados(self):
 
 		self.metodo = self.controller.frames[frmenu.MyMenu].methodRadiobutton.get()
-		importarquivo.IniciaArquivo('Resultsave').salvarArquivo(self.resultado, self.myPhi, self.MDC, self.r2,\
-																 self.metodo)
+		importarquivo.IniciaArquivo('Resultsave', controller=self.controller).salvarArquivo(self.resultado, \
+					self.myPhi, self.MDC, self.r2, self.metodo)
 
-		self.btnGraph.focus_force()
+		#self.btnGraph.focus_force()
+
+	def on_closing_results(self, *args):
+		self.controller.results_window.destroy()
+		self.controller.results_window = None
 
 	def plotarGrafico(self):
 

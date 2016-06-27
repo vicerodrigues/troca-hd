@@ -3,6 +3,7 @@
 import numpy as np
 import openpyxl
 import os, sys
+import frlog
 
 class IO_Array:
     def __init__(self, myfile):
@@ -15,16 +16,17 @@ class IO_Array:
                 self.sheet = self.wb.get_sheet_by_name(self.wb.get_sheet_names()[0])
             else:
                 print('Arquivo não encontrado!')
-                sys.exit()
+                #sys.exit()
         elif method == 'export':
             self.wb = openpyxl.Workbook()
             self.sheet = self.wb.get_sheet_by_name(self.wb.get_sheet_names()[0])
             self.sheet.title = 'Sheet1'
         else:
             print('Erro interno - import_file')
-            sys.exit()
+            #sys.exit()
             
-    def create_array(self):
+    def create_array(self, controller):
+        self.controller = controller
         if self.myfile.split('.')[-1] == 'xlsx':
             self.import_file('create')
             self.ncol = self.sheet.max_column
@@ -35,7 +37,6 @@ class IO_Array:
                 for j in range(self.ncol):
                     self.list.append(self.sheet.cell(row=i+1, column=j+1).value)
                 self.mylist.append(self.list)        
-            #self.myarray = np.array(self.mylist)
         else:
             try:
                 self.mylist=[]
@@ -43,8 +44,9 @@ class IO_Array:
                 for line in f:
                     self.mylist.append(line)
             except:
-                print('Tipo de arquivo não reconhecido!')
-                sys.exit()
+                self.controller.frames[frlog.FrameLog].WriteLog('error', 'Tipo de arquivo não reconhecido!')
+                self.mylist = None
+                #sys.exit()
         return self.mylist
 
     def export_array(self, mylist):
