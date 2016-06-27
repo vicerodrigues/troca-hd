@@ -18,9 +18,7 @@ class FrameAbreArquivos(ttk.Frame):
 
         self.perdeutCheck = 0
 
-        # Esta variável passada pela classe principal é a instância do logframe e permite
-        # escrever no log.
-
+        # Informando a inicialização do frame no Log
         self.controller.frames[frlog.FrameLog].WriteLog('info', 'Iniciando Frames de abertura dos arquivos contendo os espectros de massas.')
 
         # Iniciando o frame da classe
@@ -143,7 +141,9 @@ class FrameAbreArquivos(ttk.Frame):
     def abreEspectro(self, tipo):
 
         self.tipo = tipo
+        self.controller.frames[frlog.FrameLog].WriteLog('info', 'Abrindo arquivo referente ao espectro %s.' %self.tipo)
         if self.tipo == 'peridrogenado':
+            #self.controller.frames[frlog.FrameLog].WriteLog('info', 'Abrindo arquivo referente ao composto peridrogenado.')
             self.peridrogenado = importarquivo.IniciaArquivo(tipo, controller=self.controller).AbreArquivo()
             self.espectroPeridrogenado.configure(state='normal')
             self.espectroPeridrogenado.delete(1.0, END)
@@ -159,6 +159,7 @@ class FrameAbreArquivos(ttk.Frame):
                     self.controller.frames[frlog.FrameLog].WriteLog('error',\
                          'O tamanho do espectro não condiz com o esperado! Verifique a faixa do espectro e o arquivo.')
         elif self.tipo == 'perdeuterado':
+            #self.controller.frames[frlog.FrameLog].WriteLog('info', 'Abrindo arquivo referente ao composto perdeuterado.')
             self.perdeuterado = importarquivo.IniciaArquivo(tipo, controller=self.controller).AbreArquivo()
             self.espectroPerdeuterado.configure(state='normal')
             self.espectroPerdeuterado.delete(1.0, END)
@@ -171,6 +172,7 @@ class FrameAbreArquivos(ttk.Frame):
                     self.controller.frames[frlog.FrameLog].WriteLog('error',\
                          'O tamanho do espectro não condiz com o esperado! Verifique a faixa do espectro e o arquivo.')
         elif self.tipo == 'mistura':
+            #self.controller.frames[frlog.FrameLog].WriteLog('info', 'Abrindo arquivo referente a mistura.')
             self.mistura = importarquivo.IniciaArquivo(tipo, controller=self.controller).AbreArquivo()
             self.espectroMistura.configure(state='normal')
             self.espectroMistura.delete(1.0, END)
@@ -188,6 +190,8 @@ class FrameAbreArquivos(ttk.Frame):
     def populaTextbox(self, tipo):
 
         self.tipo = tipo
+
+        self.controller.frames[frlog.FrameLog].WriteLog('info', 'Arquivo do espectro %s carregado com sucesso' %self.tipo)
 
         if self.tipo == 'peridrogenado':
             self.espectroPeridrogenado.configure(state='normal')

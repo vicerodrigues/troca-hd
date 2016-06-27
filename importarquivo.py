@@ -1,5 +1,6 @@
 from tkinter import filedialog
 import os
+import frlog
 import arrays,spectracorr,resultsaver
 
 class IniciaArquivo:
@@ -27,11 +28,17 @@ class IniciaArquivo:
 
         # Abre arquivo e passa para self.filename
         self.filename = filedialog.askopenfilename(**self.file_opt)
+        # Identificando o arquivo aberto no log
+        if self.filename != '':
+            self.controller.frames[frlog.FrameLog].WriteLog('info', 'Arquivo: %s' %self.filename)
+        else:
+            self.controller.frames[frlog.FrameLog].WriteLog('warn', 'Abertura de arquivo cancelada')            
 
         self.controller.openFileDir = os.path.dirname(self.filename)
         
         if os.path.isfile(str(self.filename)):
             self.myArray =  arrays.IO_Array(self.filename).create_array(self.controller)[1:]
+            self.controller.frames[frlog.FrameLog].WriteLog('info', 'Calculando as correções das matriz de 13C.')
             self.corrArray = spectracorr.SpectraCorr(self.controller, self.myArray).correctSpec()
             return self.corrArray
 
@@ -55,6 +62,8 @@ class IniciaArquivo:
 
         # Abre arquivo e passa para self.filename
         self.filename = filedialog.asksaveasfilename(**self.file_opt)
+        # Identificando o arquivo no Log
+        self.controller.frames[frlog.FrameLog].WriteLog('info', 'Arquivo: %s' %self.filename)
 
         self.controller.saveFileDir = os.path.dirname(self.filename)
 
