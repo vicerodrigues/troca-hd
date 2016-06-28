@@ -6,6 +6,9 @@ import os, sys
 import frlog
 
 class IO_Array:
+    """
+    """
+
     def __init__(self, myfile):
         self.myfile = myfile
     

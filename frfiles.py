@@ -148,24 +148,36 @@ class FrameAbreArquivos(ttk.Frame):
         self.checkTratarEspectros()
     
     def abreEspectro(self, tipo):
+        """Função que cuida da abertura dos espectros de massas dos três tipos de compostos e os atribui a variáveis.
+            Além disso ainda "chama" funções auxiliares que cuidam da escrita no widget de texto, habilitar botões e
+            corrigir a contribuição de 13C.
+        """
 
+        # Determina qual espectro está sendo aberto
         self.tipo = tipo
+        # Conjunto dos possíveis espectros
         self.compostos = ['peridrogenado','perdeuterado','mistura']
+        # Escreve no log a intenção de abrir o espectro
         self.controller.frames[frlog.FrameLog].WriteLog('info', 'Abrindo arquivo referente ao espectro %s.' %self.tipo)
-
+        # Verifica para erros internos
         if self.tipo not in self.compostos:
             self.controller.frames[frlog.FrameLog].WriteLog('critical', 'Tipo de espectro inesperado!')
         else:
+            # Determina qual espectro está sendo inicializado e o associa ao widget text correto
             if self.tipo == 'peridrogenado':
                 self.myWidgetSpectra = self.espectroPeridrogenado
             elif self.tipo == 'perdeuterado':
                 self.myWidgetSpectra = self.espectroPerdeuterado
             else:
                 self.myWidgetSpectra = self.espectroMistura
+            # Instancia a classe que abre o arquivo e corrige os espectros
             self.mySpectra = importarquivo.IniciaArquivo(tipo, controller=self.controller).AbreArquivo()
+            # Apaga um espectro antigo que possa estar no widget Text
             self.myWidgetSpectra.configure(state='normal')
             self.myWidgetSpectra.delete(1.0, END)
             self.myWidgetSpectra.configure(state='disabled')
+            # Esta lógica verifica se o espectro tem o tamanho correto, decide para qual botão irá passar o foco e 
+            #passa os espectros abertos para as variáveis corretas
             if self.mySpectra != None:
                 if len(self.mySpectra) == self.controller.frames[frmolec.FrameIniciaMolecula].nPoints.get():
                     self.populaTextbox()
@@ -183,18 +195,24 @@ class FrameAbreArquivos(ttk.Frame):
                 else:
                     self.controller.frames[frlog.FrameLog].WriteLog('error',\
                          'O tamanho do espectro não condiz com o esperado! Verifique a faixa do espectro e o arquivo.')
+            # Chama a função que checa quais espectros já foram abertos para habilitar os botões de tratamento e simulação
             self.checkTratarEspectros()
 
     def populaTextbox(self):
+        """Popula as Textboxes com os espectros abertos.
+        """
 
         self.controller.frames[frlog.FrameLog].WriteLog('info', 'Arquivo do espectro %s carregado com sucesso' %self.tipo)
-
         self.myWidgetSpectra.configure(state='normal')
         self.myWidgetSpectra.delete(1.0, END)
         self.myWidgetSpectra.insert('end', '\n'.join('%.0f'%x for x in self.mySpectra))
         self.myWidgetSpectra.configure(state='disabled')
 
     def checkTratarEspectros(self):
+        """Função que verifica quais espectros já foram abertos e, quando possível, habilita os botões de tratamento 
+            e simulação dos espectros. 
+        """
+
         if self.controller.frames[frmenu.MyMenu].perdeutCheck.get() == 1:
             if (self.espectroPeridrogenado.get(1.0, END) != '\n') & (self.espectroPerdeuterado.get(1.0, END)\
              != '\n') & (self.espectroMistura.get(1.0, END) != '\n'):
@@ -216,6 +234,9 @@ class FrameAbreArquivos(ttk.Frame):
 
 
     def trataEspectros(self):
+        """Função que calcula (através de funções auxiliares) os fatores de perda H/D, e os espectros de massas dos 
+            diferentes compostos deuterados.
+        """
 
         self.fatoreshd = fatoreshd.CalculaFatoresHD(self.controller).fatoresHD()
         self.massSpectra = mscalc.DeuteratedSpectra(self.controller, self.peridrogenado, self.fatoreshd).CalcSpec()
@@ -224,9 +245,15 @@ class FrameAbreArquivos(ttk.Frame):
         self.btnSimular.focus_force()
 
     def salvarMS(self):
+        """Função que inicia o módulo que salva os espectros de massas dos compostos deuterados.
+        """
+
         importarquivo.IniciaArquivo('MSsave', controller=self.controller).salvarArquivo(self.massSpectra)
 
     def simularEspectros(self):
+        """Função que dá início a simulação do espectro da mistura e abre a janela de resultados.
+        """
+
         simulaespectro.SimularEspectro(self.controller, self.mistura, self.massSpectra)
 
 
