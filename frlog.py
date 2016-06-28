@@ -24,7 +24,7 @@ class FrameLog(ttk.Frame, logging.Handler):
 
         # Criando a ScrollBar e associando a TextBox
         self.logScroll = ttk.Scrollbar(self.iniciaLog, orient=VERTICAL, command=self.logText.yview)
-        self.logScroll.grid(row=1, column=1, sticky=(N, S))
+        self.logScroll.grid(row=1, column=1, pady=4, sticky=(N, S))
         self.logText['yscrollcommand'] = self.logScroll.set
 
         # Create textLogger

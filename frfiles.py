@@ -238,8 +238,16 @@ class FrameAbreArquivos(ttk.Frame):
             diferentes compostos deuterados.
         """
 
+        # Escrevendo no log e calculando fatores H/D
+        self.controller.frames[frlog.FrameLog].WriteLog('info', 'Calculando fatores de perda H/D.')
         self.fatoreshd = fatoreshd.CalculaFatoresHD(self.controller).fatoresHD()
+        # Escrevendo no log e calculando matriz de espectros de massas
+        self.controller.frames[frlog.FrameLog].WriteLog('info', 'Calculando a matriz de espectros de massas dos diferentes\
+ compostos deuterados.')
         self.massSpectra = mscalc.DeuteratedSpectra(self.controller, self.peridrogenado, self.fatoreshd).CalcSpec()
+        # Habilitando botões no GUI
+        self.controller.frames[frlog.FrameLog].WriteLog('info', 'Habilitando botões para salvar a matriz de espectros\
+ de massas e executar a simulação.')
         self.btnSaveMS.configure(state='enabled')
         self.btnSimular.configure(state='enabled')
         self.btnSimular.focus_force()
@@ -248,6 +256,7 @@ class FrameAbreArquivos(ttk.Frame):
         """Função que inicia o módulo que salva os espectros de massas dos compostos deuterados.
         """
 
+        self.controller.frames[frlog.FrameLog].WriteLog('info', 'Salvando a matriz de espectros de massas.')
         importarquivo.IniciaArquivo('MSsave', controller=self.controller).salvarArquivo(self.massSpectra)
 
     def simularEspectros(self):

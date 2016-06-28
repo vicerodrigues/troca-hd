@@ -78,9 +78,7 @@ class IniciaArquivo:
 
         # Abre arquivo e passa para self.filename
         self.filename = filedialog.asksaveasfilename(**self.file_opt)
-        # Identificando o arquivo no Log
-        self.controller.frames[frlog.FrameLog].WriteLog('info', 'Arquivo: %s' %self.filename)
-
+            
         # Faz o update da variável que contém o último diretório aberto
         self.controller.saveFileDir = os.path.dirname(self.filename)
 
@@ -92,4 +90,8 @@ class IniciaArquivo:
             elif self.tipo == 'Resultsave':
                 # args é uma passagem de variáveis descritoras das simulação somente utilizada ao salvar os resultados. 
                 resultsaver.OutputResults(self.filename).export_results(self.outputList, self.args)
-
+            # Identificando o arquivo no Log
+            self.controller.frames[frlog.FrameLog].WriteLog('info', 'Arquivo: %s' %self.filename)
+            self.controller.frames[frlog.FrameLog].WriteLog('info', 'Arquivo salvo com sucesso.')
+        else:
+            self.controller.frames[frlog.FrameLog].WriteLog('warn', 'Abertura de arquivo cancelada')            

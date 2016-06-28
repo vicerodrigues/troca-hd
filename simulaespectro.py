@@ -3,7 +3,7 @@ from tkinter import ttk
 import numpy as np
 import scipy.optimize as opt
 import os
-import frmenu
+import frmenu,frlog
 import importarquivo
 
 class SimularEspectro:
@@ -113,6 +113,7 @@ class SimularEspectro:
 	def salvaResultados(self):
 
 		self.metodo = self.controller.frames[frmenu.MyMenu].methodRadiobutton.get()
+		self.controller.frames[frlog.FrameLog].WriteLog('info', 'Salvando arquivo com os resultados da simulação.')
 		importarquivo.IniciaArquivo('Resultsave', controller=self.controller).salvarArquivo(self.resultado, \
 					self.myPhi, self.MDC, self.r2, self.metodo)
 
