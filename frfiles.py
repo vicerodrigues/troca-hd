@@ -3,7 +3,7 @@ from tkinter import ttk
 from tkinter import filedialog
 import os
 import frlog,frmenu,frmolec
-import importarquivo,fatoreshd,mscalc,arrays,simulaespectro
+import importarquivo,fatoreshd,mscalc,simulaespectro
 
 class FrameAbreArquivos(ttk.Frame):
     """Esta classe cria o frame onde é são abertos os arquivos contendo os espectros de massas dos compostos
