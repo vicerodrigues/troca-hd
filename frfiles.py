@@ -12,11 +12,10 @@ class FrameAbreArquivos(ttk.Frame):
     """
 
     def __init__(self, parent, controller):
+        # Inicia ttk.Frame de onde a presente classe herda.
         ttk.Frame.__init__(self, parent)
-
+        # Passando a variável controller para o local
         self.controller = controller
-
-        self.perdeutCheck = 0
 
         # Informando a inicialização do frame no Log
         self.controller.frames[frlog.FrameLog].WriteLog('info', 'Iniciando Frames de abertura dos arquivos contendo os espectros de massas.')
@@ -100,9 +99,11 @@ class FrameAbreArquivos(ttk.Frame):
         self.espectroMisturaScrollH.grid(row=2, column=0, sticky=(E, W))
         self.espectroMistura['xscrollcommand'] = self.espectroMisturaScrollH.set
 
+        # Variáveis de padding do botões
         self.myPadX = 35
         self.myPadY = 5
 
+        # Adicionando os botões de Cálculo dos espectros, salvar espectros e simular mistura
         self.btnCalcEspectros = ttk.Button(self.abreArquivos, text='Calcular espectros', command=lambda: \
             self.trataEspectros(), state='disabled')
         self.btnCalcEspectros.bind('<Return>', lambda x: self.trataEspectros())
@@ -122,92 +123,76 @@ class FrameAbreArquivos(ttk.Frame):
             , sticky='EW')
 
     def AtualizaPerdeutCheck(self):
+        """Função que cuida da lógica de disponibilidade da abertura do espectro de massas do composto perdeuterado,
+            de acordo com a opção definida no menu.
+        """
 
-        self.perdeutCheck = self.controller.frames[frmenu.MyMenu].perdeutCheck.get()
+        # Somente faz algo caso a molécula tenha sido aceita e os botões de abrir os arquivos estejam disponíveis
         if self.controller.frames[frmolec.FrameIniciaMolecula].acceptedMolec == True:
-            if self.perdeutCheck == 1:
+            # Habilita o botão de abertura do espectro caso necessário
+            if self.controller.frames[frmenu.MyMenu].perdeutCheck.get() == 1:
                 self.btnAbrePerdeuterado.configure(state='enabled')
-            elif self.perdeutCheck ==0:
+            # Desabilita o botão e apaga um espectro que porventura tenha sido aberto
+            elif self.controller.frames[frmenu.MyMenu].perdeutCheck.get() ==0:
                 self.btnAbrePerdeuterado.configure(state='disabled')
                 self.espectroPerdeuterado.configure(state='normal')
                 self.espectroPerdeuterado.delete(1.0, END)
                 self.espectroPerdeuterado.configure(state='disabled')
+                # Re-trata os espectros caso isso já tivesse sido feito anteriormente, agora excluindo o espectro
+                #perdeuterado.
                 if (self.espectroPeridrogenado.get(1.0, END) != '\n') & (self.espectroMistura.get(1.0, END) != '\n'):
                     self.trataEspectros()
             else:
                 raise ValueError('Problemas com o checkbutton que controla o uso do espectro perdeuterado.')
+        # Chama a função de checagem que toma conta da lógica de habilitação do botões inferiores do frame.
         self.checkTratarEspectros()
     
     def abreEspectro(self, tipo):
 
         self.tipo = tipo
+        self.compostos = ['peridrogenado','perdeuterado','mistura']
         self.controller.frames[frlog.FrameLog].WriteLog('info', 'Abrindo arquivo referente ao espectro %s.' %self.tipo)
-        if self.tipo == 'peridrogenado':
-            #self.controller.frames[frlog.FrameLog].WriteLog('info', 'Abrindo arquivo referente ao composto peridrogenado.')
-            self.peridrogenado = importarquivo.IniciaArquivo(tipo, controller=self.controller).AbreArquivo()
-            self.espectroPeridrogenado.configure(state='normal')
-            self.espectroPeridrogenado.delete(1.0, END)
-            self.espectroPeridrogenado.configure(state='disabled')
-            if self.peridrogenado != None:
-                if len(self.peridrogenado) == self.controller.frames[frmolec.FrameIniciaMolecula].nPoints.get():
-                    self.populaTextbox(self.tipo)
-                    if self.controller.frames[frmenu.MyMenu].perdeutCheck.get() == 1:
-                        self.btnAbrePerdeuterado.focus_force()
-                    else:
-                        self.btnAbreMistura.focus_force()
-                else:
-                    self.controller.frames[frlog.FrameLog].WriteLog('error',\
-                         'O tamanho do espectro não condiz com o esperado! Verifique a faixa do espectro e o arquivo.')
-        elif self.tipo == 'perdeuterado':
-            #self.controller.frames[frlog.FrameLog].WriteLog('info', 'Abrindo arquivo referente ao composto perdeuterado.')
-            self.perdeuterado = importarquivo.IniciaArquivo(tipo, controller=self.controller).AbreArquivo()
-            self.espectroPerdeuterado.configure(state='normal')
-            self.espectroPerdeuterado.delete(1.0, END)
-            self.espectroPerdeuterado.configure(state='disabled')
-            if self.perdeuterado != None:
-                if len(self.perdeuterado) == self.controller.frames[frmolec.FrameIniciaMolecula].nPoints.get():
-                    self.populaTextbox(self.tipo)
-                    self.btnAbreMistura.focus_force()
-                else:
-                    self.controller.frames[frlog.FrameLog].WriteLog('error',\
-                         'O tamanho do espectro não condiz com o esperado! Verifique a faixa do espectro e o arquivo.')
-        elif self.tipo == 'mistura':
-            #self.controller.frames[frlog.FrameLog].WriteLog('info', 'Abrindo arquivo referente a mistura.')
-            self.mistura = importarquivo.IniciaArquivo(tipo, controller=self.controller).AbreArquivo()
-            self.espectroMistura.configure(state='normal')
-            self.espectroMistura.delete(1.0, END)
-            self.espectroMistura.configure(state='disabled')
-            if self.mistura != None:
-                if len(self.mistura) == self.controller.frames[frmolec.FrameIniciaMolecula].nPoints.get():
-                    self.populaTextbox(self.tipo)
-                else:
-                    self.controller.frames[frlog.FrameLog].WriteLog('error',\
-                         'O tamanho do espectro não condiz com o esperado! Verifique a faixa do espectro e o arquivo.')
-        else:
+
+        if self.tipo not in self.compostos:
             self.controller.frames[frlog.FrameLog].WriteLog('critical', 'Tipo de espectro inesperado!')
-        self.checkTratarEspectros()
+        else:
+            if self.tipo == 'peridrogenado':
+                self.myWidgetSpectra = self.espectroPeridrogenado
+            elif self.tipo == 'perdeuterado':
+                self.myWidgetSpectra = self.espectroPerdeuterado
+            else:
+                self.myWidgetSpectra = self.espectroMistura
+            self.mySpectra = importarquivo.IniciaArquivo(tipo, controller=self.controller).AbreArquivo()
+            self.myWidgetSpectra.configure(state='normal')
+            self.myWidgetSpectra.delete(1.0, END)
+            self.myWidgetSpectra.configure(state='disabled')
+            if self.mySpectra != None:
+                if len(self.mySpectra) == self.controller.frames[frmolec.FrameIniciaMolecula].nPoints.get():
+                    self.populaTextbox()
+                    if self.tipo == 'peridrogenado':
+                        if self.controller.frames[frmenu.MyMenu].perdeutCheck.get() == 1:
+                            self.btnAbrePerdeuterado.focus_force()
+                        else:
+                            self.btnAbreMistura.focus_force()
+                        self.peridrogenado = self.mySpectra
+                    elif self.tipo == 'perdeuterado':
+                        self.btnAbreMistura.focus_force()
+                        self.perdeuterado = self.mySpectra
+                    else:
+                        self.mistura = self.mySpectra                    
+                else:
+                    self.controller.frames[frlog.FrameLog].WriteLog('error',\
+                         'O tamanho do espectro não condiz com o esperado! Verifique a faixa do espectro e o arquivo.')
+            self.checkTratarEspectros()
 
-    def populaTextbox(self, tipo):
-
-        self.tipo = tipo
+    def populaTextbox(self):
 
         self.controller.frames[frlog.FrameLog].WriteLog('info', 'Arquivo do espectro %s carregado com sucesso' %self.tipo)
 
-        if self.tipo == 'peridrogenado':
-            self.espectroPeridrogenado.configure(state='normal')
-            self.espectroPeridrogenado.delete(1.0, END)
-            self.espectroPeridrogenado.insert('end', '\n'.join('%.0f'%x for x in self.peridrogenado))
-            self.espectroPeridrogenado.configure(state='disabled')
-        elif self.tipo == 'perdeuterado':
-            self.espectroPerdeuterado.configure(state='normal')
-            self.espectroPerdeuterado.delete(1.0, END)
-            self.espectroPerdeuterado.insert('end', '\n'.join('%.0f'%x for x in self.perdeuterado))
-            self.espectroPerdeuterado.configure(state='disabled')
-        elif self.tipo == 'mistura':
-            self.espectroMistura.configure(state='normal')
-            self.espectroMistura.delete(1.0, END)
-            self.espectroMistura.insert('end', '\n'.join('%.0f'%x for x in self.mistura))
-            self.espectroMistura.configure(state='disabled')
+        self.myWidgetSpectra.configure(state='normal')
+        self.myWidgetSpectra.delete(1.0, END)
+        self.myWidgetSpectra.insert('end', '\n'.join('%.0f'%x for x in self.mySpectra))
+        self.myWidgetSpectra.configure(state='disabled')
 
     def checkTratarEspectros(self):
         if self.controller.frames[frmenu.MyMenu].perdeutCheck.get() == 1:
