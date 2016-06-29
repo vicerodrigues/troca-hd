@@ -1,0 +1,159 @@
+==========Inicializando o programa===========
+
+            Inicializando o LOG:             
+
+ (2016-06-29 17:34:23,151) [INFO]:
+     Iniciando Frame de log.
+
+ (2016-06-29 17:34:23,151) [INFO]:
+     Iniciando Frames de abertura dos arquivos contendo os espectros de massas.
+
+ (2016-06-29 17:34:23,160) [INFO]:
+     Iniciando Frames de descrição da molécula e espectro.
+
+ (2016-06-29 17:34:23,171) [INFO]:
+     Calculando massas moleculares e número de pontos.
+
+ (2016-06-29 17:34:26,376) [WARNING]:
+     De modo a melhorar a qualidade da simulação sugere-se utiliza faixa do espectro de massas contendo pelo menos entre (MMH-3) e (MMD+2).
+
+ (2016-06-29 17:34:26,377) [WARNING]:
+     De modo a melhorar a qualidade da simulação sugere-se utiliza faixa do espectro de massas contendo pelo menos entre (MMH-3) e (MMD+2).
+
+ (2016-06-29 17:34:26,982) [ERROR]:
+     Sistema supra-determinado: O número mínimo de pontos a serem considerados deve ser maior que o número de H's +1
+
+ (2016-06-29 17:34:26,983) [ERROR]:
+     Sistema supra-determinado: O número mínimo de pontos a serem considerados deve ser maior que o número de H's +1
+
+ (2016-06-29 17:34:27,588) [ERROR]:
+     Cuidado! A massa mínima do espectro não pode ser maior que a máxima.
+
+ (2016-06-29 17:34:27,588) [WARNING]:
+     Ajustando automaticamente o valor
+
+ (2016-06-29 17:34:27,689) [WARNING]:
+     A faixa escolhida do espectro transcende a faixa de perda dos hidrogênios da molécula. Recomenda-se usar (MMH-nHydrogen) para o mínimo.
+
+ (2016-06-29 17:34:27,690) [WARNING]:
+     A faixa escolhida do espectro transcende a faixa de perda dos hidrogênios da molécula. Recomenda-se usar (MMH-nHydrogen) para o mínimo.
+
+ (2016-06-29 17:34:28,194) [WARNING]:
+     No caso de moléculas terminadas em grupos CH3 (Ex.: propano ou metil benzeno), pode estar havendo sobreposição do espectro considerado com o espectro de M-15.
+
+ (2016-06-29 17:34:28,195) [WARNING]:
+     Sugere-se aumentar o valor do limite mínimo do espectro de massas.
+
+ (2016-06-29 17:34:28,195) [WARNING]:
+     No caso de moléculas terminadas em grupos CH3 (Ex.: propano ou metil benzeno), pode estar havendo sobreposição do espectro considerado com o espectro de M-15.
+
+ (2016-06-29 17:34:28,195) [WARNING]:
+     Sugere-se aumentar o valor do limite mínimo do espectro de massas.
+
+           Inicializando molécula:           
+
+ (2016-06-29 17:34:40,222) [INFO]:
+     Molécula: C3H8
+     Espectro: -Min:36
+               -Max:53
+
+ (2016-06-29 17:34:40,222) [INFO]:
+     Calculando a matriz de contribuições de 13C na molécula.
+
+ (2016-06-29 17:34:40,222) [INFO]:
+     Imprimindo a matrix de contribuições de 13C:
+
+       13C [0]:0.9666356690
+       13C [1]:0.0330000000
+       13C [2]:0.0003630000
+       13C [3]:0.0000013310
+
+ (2016-06-29 17:34:40,223) [INFO]:
+     Habilitando os botões para abrir os arquivos de espectros de massas
+
+ (2016-06-29 17:34:40,224) [INFO]:
+     Desabilitando o frame de descrição da molécula e espectro
+
+ (2016-06-29 17:34:41,335) [INFO]:
+     Abrindo arquivo referente ao espectro peridrogenado.
+
+ (2016-06-29 17:34:44,541) [INFO]:
+     Arquivo: /home/victor/git/troca-hd/examples/PH-C3H8.xlsx
+
+ (2016-06-29 17:34:44,620) [INFO]:
+     Calculando as correções das matriz de 13C.
+
+ (2016-06-29 17:34:44,621) [INFO]:
+     Arquivo do espectro peridrogenado carregado com sucesso
+
+ (2016-06-29 17:34:48,429) [INFO]:
+     Abrindo arquivo referente ao espectro mistura.
+
+ (2016-06-29 17:34:51,644) [INFO]:
+     Arquivo: /home/victor/git/troca-hd/examples/PM-C3H8.xlsx
+
+ (2016-06-29 17:34:51,683) [INFO]:
+     Calculando as correções das matriz de 13C.
+
+ (2016-06-29 17:34:51,685) [INFO]:
+     Arquivo do espectro mistura carregado com sucesso
+
+ (2016-06-29 17:34:52,978) [INFO]:
+     Calculando fatores de perda H/D:
+
+       Fator H/D [0]:1.000
+       Fator H/D [1]:0.650
+       Fator H/D [2]:0.650
+       Fator H/D [3]:0.650
+       Fator H/D [4]:0.650
+       Fator H/D [5]:0.650
+       Fator H/D [6]:0.650
+       Fator H/D [7]:0.650
+       Fator H/D [8]:0.650
+
+ (2016-06-29 17:34:52,981) [INFO]:
+     Calculando a matriz de espectros de massas dos diferentes compostos deuterados.
+
+ (2016-06-29 17:34:52,987) [INFO]:
+     Habilitando botões para salvar a matriz de espectros de massas e executar a simulação.
+
+ (2016-06-29 17:34:54,893) [INFO]:
+     Salvando a matriz de espectros de massas.
+
+ (2016-06-29 17:35:03,027) [INFO]:
+     Arquivo: /home/victor/git/troca-hd/examples/MSspectra-C3H8.xlsx
+
+ (2016-06-29 17:35:03,027) [INFO]:
+     Arquivo salvo com sucesso.
+
+ (2016-06-29 17:35:05,233) [INFO]:
+     Simulando o espectro da mistura utilizando o método Non-negative least-squares
+
+ (2016-06-29 17:35:05,234) [INFO]:
+     Resultado de composição da mistura:
+
+       D[0]: 58.99%
+       D[1]: 32.47%
+       D[2]:  5.44%
+       D[3]:  1.32%
+       D[4]:  0.67%
+       D[5]:  0.11%
+       D[6]:  0.00%
+       D[7]:  0.18%
+       D[8]:  0.83%
+
+       R^2 : 0.9710
+
+ (2016-06-29 17:35:05,235) [INFO]:
+     Abrindo a janela de resultados
+
+ (2016-06-29 17:35:21,661) [INFO]:
+     Salvando arquivo com os resultados da simulação.
+
+ (2016-06-29 17:35:36,694) [INFO]:
+     Arquivo: /home/victor/git/troca-hd/examples/Resultados-C3H8.xlsx
+
+ (2016-06-29 17:35:36,694) [INFO]:
+     Arquivo salvo com sucesso.
+
+

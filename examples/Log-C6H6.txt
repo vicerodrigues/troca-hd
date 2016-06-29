@@ -1,0 +1,103 @@
+==========Inicializando o programa===========
+
+            Inicializando o LOG:             
+
+ (2016-06-29 12:37:30,080) [INFO]:
+     Iniciando Frame de log.
+
+ (2016-06-29 12:37:30,080) [INFO]:
+     Iniciando Frames de abertura dos arquivos contendo os espectros de massas.
+
+ (2016-06-29 12:37:30,089) [INFO]:
+     Iniciando Frames de descrição da molécula e espectro.
+
+ (2016-06-29 12:37:30,100) [INFO]:
+     Calculando massas moleculares e número de pontos.
+
+           Inicializando molécula:           
+
+ (2016-06-29 12:37:31,535) [INFO]:
+     Molécula: C6H6
+     Espectro: -Min:73
+               -Max:86
+
+ (2016-06-29 12:37:31,536) [INFO]:
+     Calculando a matriz de contribuições de 13C na molécula.
+
+ (2016-06-29 12:37:31,536) [INFO]:
+     Imprimindo a matrix de contribuições de 13C:
+
+       13C [0]:0.9321581594
+       13C [1]:0.0660000000
+       13C [2]:0.0018150000
+       13C [3]:0.0000266200
+       13C [4]:0.0000002196
+       13C [5]:0.0000000010
+       13C [6]:0.0000000000
+
+ (2016-06-29 12:37:31,538) [INFO]:
+     Habilitando os botões para abrir os arquivos de espectros de massas
+
+ (2016-06-29 12:37:31,538) [INFO]:
+     Desabilitando o frame de descrição da molécula e espectro
+
+ (2016-06-29 12:37:31,691) [INFO]:
+     Abrindo arquivo referente ao espectro peridrogenado.
+
+ (2016-06-29 12:37:31,828) [INFO]:
+     Arquivo: /home/victor/git/troca-hd/examples/PH.xlsx
+
+ (2016-06-29 12:37:31,857) [INFO]:
+     Calculando as correções das matriz de 13C.
+
+ (2016-06-29 12:37:31,858) [INFO]:
+     Arquivo do espectro peridrogenado carregado com sucesso
+
+ (2016-06-29 12:37:31,985) [INFO]:
+     Abrindo arquivo referente ao espectro mistura.
+
+ (2016-06-29 12:37:32,342) [INFO]:
+     Arquivo: /home/victor/git/troca-hd/examples/PM.xlsx
+
+ (2016-06-29 12:37:32,371) [INFO]:
+     Calculando as correções das matriz de 13C.
+
+ (2016-06-29 12:37:32,372) [INFO]:
+     Arquivo do espectro mistura carregado com sucesso
+
+ (2016-06-29 12:37:32,589) [INFO]:
+     Calculando fatores de perda H/D:
+
+       Fator H/D [0]:1.000
+       Fator H/D [1]:0.650
+       Fator H/D [2]:0.650
+       Fator H/D [3]:0.650
+       Fator H/D [4]:0.650
+       Fator H/D [5]:0.650
+
+ (2016-06-29 12:37:32,591) [INFO]:
+     Calculando a matriz de espectros de massas dos diferentes compostos deuterados.
+
+ (2016-06-29 12:37:32,594) [INFO]:
+     Habilitando botões para salvar a matriz de espectros de massas e executar a simulação.
+
+ (2016-06-29 12:37:32,899) [INFO]:
+     Simulando o espectro da mistura utilizando o método Non-negative least-squares
+
+ (2016-06-29 12:37:32,899) [INFO]:
+     Resultado de composição da mistura:
+
+       D[0]:  0.21%
+       D[1]:  1.18%
+       D[2]:  6.10%
+       D[3]: 20.19%
+       D[4]: 33.00%
+       D[5]: 28.78%
+       D[6]: 10.55%
+
+       R^2 : 0.9921
+
+ (2016-06-29 12:37:32,901) [INFO]:
+     Abrindo a janela de resultados
+
+

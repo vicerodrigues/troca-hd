@@ -2,9 +2,13 @@
 
 from tkinter import *
 from tkinter import ttk
-import frmolec,frlog,frfiles,frmenu
+from molecula import frmolec
+from log import frlog
+from files import frfiles
+from menu import frmenu
 import tkinter.messagebox as messagebox
 import os,pickle
+
 
 class TrocaMain(Tk):
     """Classe principal do programa de cálculo para troca H-D.
@@ -54,6 +58,7 @@ class TrocaMain(Tk):
         self.bind('<Control-q>', self.on_closing)
         self.bind('<Control-r>', self.frames[frmenu.MyMenu].resetSoft)
         self.bind('<Control-R>', self.frames[frmenu.MyMenu].fullResetSoft)
+        self.bind('<Control-s>', self.frames[frmenu.MyMenu].saveLog)
 
     def on_load(self):
         """Função executada no carregamento do programa que retorna as variáveis guardadas em store.pckl
