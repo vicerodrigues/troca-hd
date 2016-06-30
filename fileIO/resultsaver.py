@@ -71,5 +71,3 @@ class OutputResults:
 		self.sheet.add_chart(self.chart, "E7")
 		# Salvando o arquivo excel de fato
 		self.wb.save(self.myfile)
-
-

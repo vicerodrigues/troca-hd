@@ -64,8 +64,10 @@ class TrocaMain(Tk):
         """Função executada no carregamento do programa que retorna as variáveis guardadas em store.pckl
         """
 
-        # abre o arquivo store.pckl em modo binário de leitura
-        self.file = open(os.path.expanduser('~/git/troca-hd/data/store.pckl'), 'rb')
+        # abre o arquivo store.pckl em modo binário de leitura (MYSOFTPATH será substituído pelo aplicativo de instalação)
+        self.mySoftPath = 'MYSOFTPATH'
+        self.myDataPath = 'data/store.pckl'
+        self.file = open(os.path.expanduser(os.path.join(self.mySoftPath, self.myDataPath)), 'rb')
         # utitliza o módulo pickle para recurperar o dicionário guardado
         self.myVars = pickle.load(self.file)
         # fecha o arquivo.
@@ -96,8 +98,10 @@ class TrocaMain(Tk):
             self.myVars["methodRadiobutton"] = self.frames[frmenu.MyMenu].methodRadiobutton.get()
             self.myVars["logRadiobutton"] = self.frames[frmenu.MyMenu].logRadiobutton.get()
 
-            # abre o arquivo store.pckl em modo binário de escrita
-            self.file = open(os.path.expanduser('~/git/troca-hd/data/store.pckl'), 'wb')
+            # abre o arquivo store.pckl em modo binário de escrita (MYSOFTPATH será substituído pelo aplicativo de instalação)
+            self.mySoftPath = 'MYSOFTPATH'
+            self.myDataPath = 'data/store.pckl'
+            self.file = open(os.path.expanduser(os.path.join(self.mySoftPath, self.myDataPath)), 'wb')
             # utiliza o módulo pickle para salvar o dicionário
             pickle.dump(self.myVars, self.file)
             # fecha o arqquivo
@@ -112,8 +116,10 @@ if __name__ == '__main__':
     myTroca = TrocaMain(className='Trocahd')
     # Título do programa
     myTroca.title('Troca H-D Calculator')
-    # Define o ícone do programa
-    img = PhotoImage(file=os.path.expanduser('~/Calculator.png'))
+    # Define o ícone do programa (MYSOFTPATH será substituído pelo aplicativo de instalação)
+    mySoftPath = 'MYSOFTPATH'
+    myDataPath = 'Calculator.png'
+    img = PhotoImage(file=os.path.expanduser(os.path.join(mySoftPath, myDataPath)))
     myTroca.tk.call('wm', 'iconphoto', myTroca._w, img)
     # define aonde o programa será aberto
     myTroca.geometry('+75+50')

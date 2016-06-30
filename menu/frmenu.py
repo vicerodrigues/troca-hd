@@ -223,8 +223,13 @@ class MyMenu(Menu):
         self.parent.frames[frmolec.FrameIniciaMolecula].myHydNumber.set(6)
         self.parent.frames[frmolec.FrameIniciaMolecula].mySpecMax.set(86)
         self.parent.frames[frmolec.FrameIniciaMolecula].mySpecMin.set(73)
-        self.parent.openFileDir = '~/git/troca-hd/examples/'
-        self.parent.saveFileDir = '~/git/troca-hd/examples/'
+
+        # (MYSOFTPATH será substituído pelo aplicativo de instalação)
+        self.mySoftPath = 'MYSOFTPATH'
+        self.myExamplePath = 'examples/'
+        # Criação do caminho do diretório examples
+        self.parent.openFileDir = os.path.join(self.mySoftPath, self.myExamplePath)
+        self.parent.saveFileDir = os.path.join(self.mySoftPath, self.myExamplePath)
 
         self.perdeutCheck.set(0)
         self.lembrarCheck.set(1)
