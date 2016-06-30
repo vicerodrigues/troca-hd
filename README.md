@@ -10,4 +10,6 @@ Instalação:
 
 	3) Executar o script de instalação. Caso este seja executado como root irá automaticamente atualizar o sistema e instalar as dependências, sendo o arquivo de atalho (.desktop) encaminhado para a pasta /usr/share/applications. Caso não seja executado como root o arquivo de atalho irá para a pasta ~/.local/share/applications
 
-	
+Desinstalação:
+
+	1) O único arquivo criado fora da pasta do programa é o arquivo de atalho troca-hd.desktop que deve ser excluído manualmente.

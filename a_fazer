@@ -1,4 +1,2 @@
       -Verificar quais objetos e variáveis realamente precisam de cópia local (self.fulano = fulano)
       -Acondicionar os arquivos em suas sub-pastas (já estão em pastas)
-      
-      -Criar o instalador do programa que irá passar a pasta de instalação para os diferentes arquivos
