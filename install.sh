@@ -12,7 +12,7 @@ then
 	echo '
 Instalando dependências.
 '
-	apt update && apt upgrade -y && apt install python3 python3-dev python3-pil python3-tk tk tk-dev python3-pip libpng12-dev libfreetype6-dev && pip3 install numpy scipy openpyxl matplotlib
+	apt update && apt upgrade -y && apt install python3 python3-dev python3-pil python3-tk tk tk-dev python3-pip libpng12-dev libfreetype6-dev && pip3 install numpy scipy openpyxl matplotlib -y
 
 else
 
@@ -33,9 +33,11 @@ Atualizando o caminho de instalação no software.
 
 MYPATH="$(pwd)"
 sed -i "s|MYSOFTPATH|$MYPATH|g" trocahd_oop.py
+chmod +x trocahd_oop.py
 
 cd menu
 sed -i "s|MYSOFTPATH|$MYPATH|g" frmenu.py
+cd ..
 
 }
 
@@ -44,9 +46,27 @@ function CriaDesktop()
 
 echo '
 Criando atalho de inicialização do programa - arquivo: troca-hd.desktop
-
-***EM ANDAMENTO***
 '
+
+EXECPATH="$MYPATH/trocahd_oop.py"
+sed -i "s|TROCAHDEXECPATH|$EXECPATH|g" troca-hd.desktop
+
+ICONPATH="$MYPATH/Calculator.png"
+sed -i "s|TROCAHDICONPATH|$ICONPATH|g" troca-hd.desktop
+
+chmod +x troca-hd.desktop
+
+if [ $USER='root' ]
+
+then
+
+	mv troca-hd.desktop /usr/share/applications/
+
+else
+
+	mv troca-hd.desktop ~/.local/share/applications/
+
+fi
 
 }
 
