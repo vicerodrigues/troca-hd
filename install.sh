@@ -56,7 +56,7 @@ sed -i "s|TROCAHDICONPATH|$ICONPATH|g" troca-hd.desktop
 
 chmod +x troca-hd.desktop
 
-if [ $USER='root' ]
+if [ $USER = 'root' ]
 
 then
 
