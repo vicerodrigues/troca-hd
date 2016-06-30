@@ -70,7 +70,9 @@ fi
 
 }
 
-echo '***********************Aplicativo de instalação Troca-HD!***********************'
+echo '
+***********************Aplicativo de instalação Troca-HD!***********************
+'
 
 sleep 5
 
