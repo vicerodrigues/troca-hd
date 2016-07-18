@@ -12,7 +12,7 @@ then
 	echo '
 Instalando dependências.
 '
-	apt update && apt upgrade -y && apt install python3 python3-dev python3-pil python3-tk tk tk-dev python3-pip libpng12-dev libfreetype6-dev && pip3 install numpy scipy openpyxl matplotlib -y
+	apt update && apt upgrade -y && apt install python3 python3-dev python3-pil python3-tk tk tk-dev python3-pip libpng12-dev libfreetype6-dev libblas-dev liblapack-dev && pip3 install numpy scipy openpyxl matplotlib
 
 else
 

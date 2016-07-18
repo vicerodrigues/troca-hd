@@ -1,10 +1,10 @@
 # troca-hd
 
-Dependências: python3, numpy, scipy, tk (tkinter), openpyxl (futuramente tk-dev e matplolib)
+Dependências: python3 (testado em python 3.5.1+ Ubuntu 16.04), numpy, scipy, tk (tkinter), openpyxl (futuramente tk-dev e matplolib)
 
 Instalação:
 
-	1) Descompactar o arquivo .tar.xz ou clonar o diretório no github (git clone http://github.com/vicerodrigues/troca-hd.git)
+	1) Descompactar o arquivo .tar.xz ou clonar o diretório no github (git clone https://github.com/vicerodrigues/troca-hd.git)
 
 	2) Tornar o script de instalação executável (chmod +x install.sh)
 
